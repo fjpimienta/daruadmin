@@ -4,6 +4,7 @@ export class ProductExport {
   partnumber: string;
   sku: string;
   upc: string;
+  ean: string;
 }
 
 export class Product extends ProductExport {
