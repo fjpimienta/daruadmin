@@ -448,6 +448,7 @@ export class ImportarComponent implements OnInit {
               newItemExport.partnumber = item.partnumber;
               newItemExport.sku = item.sku;
               newItemExport.upc = item.upc;
+              newItemExport.ean = item.ean;
               this.dataExport.push(newItemExport);
             });
           } else {
@@ -623,8 +624,17 @@ export class ImportarComponent implements OnInit {
       case 'ct':
         this.ctAlmacenes = await this.getAlmacenes();
         const productosCt = await this.externalAuthService.getProductsCt();
+        console.log('productosCt: ', productosCt);
         if (productosCt.status) {
-          const productsJson = await this.getProductsCt();
+          let productsCtFtp: any[] = [];
+          const productosCtJson = await this.externalAuthService.getProductsCtJson();
+          if (productosCtJson && productosCtJson.status && productosCtJson.jsonProductsCt && productosCtJson.jsonProductsCt.length > 0) {
+            productsCtFtp = productsCtFtp.concat(productosCtJson.jsonProductsCt);
+          }
+          const productosCtXml = await this.externalAuthService.getProductsCtXml();
+          if (productosCtXml && productosCtXml.status && productosCtXml.jsonProductsCtHP && productosCtXml.jsonProductsCtHP.length > 0) {
+            productsCtFtp = productsCtFtp.concat(productosCtXml.jsonProductsCtHP);
+          }
           let i = 1;
           const excludedCategories = [
             'Caretas', 'Cubrebocas', 'Desinfectantes', 'Equipo', 'Termómetros',
@@ -637,10 +647,10 @@ export class ImportarComponent implements OnInit {
           ];
           for (const product of productosCt.stockProductsCt) {
             if (!excludedCategories.includes(product.subcategoria)) {
-              productsJson.forEach(async productJson => {
-                if (product.codigo === productJson.clave) {
+              productsCtFtp.forEach(async productFtp => {
+                if (product.codigo === productFtp.clave) {
                   const productTmp: IProductoCt = this.convertirPromocion(product);
-                  const itemData: Product = await this.setProduct(supplier.slug, productTmp, productJson);
+                  const itemData: Product = await this.setProduct(supplier.slug, productTmp, productFtp);
                   if (itemData.id !== undefined) {
                     productos.push(itemData);
                   }
@@ -690,7 +700,6 @@ export class ImportarComponent implements OnInit {
             }
           }
         }
-        console.log('productos: ', productos);
         return await productos;
       default:
         break;
@@ -1313,6 +1322,7 @@ export class ImportarComponent implements OnInit {
             itemData.stock = disponible;
             itemData.sku = productJson.clave;
             itemData.upc = productJson.upc;
+            itemData.ean = productJson.ean;
             itemData.partnumber = productJson.numParte;
             unidad.id = 'PZ';
             unidad.name = 'Pieza';

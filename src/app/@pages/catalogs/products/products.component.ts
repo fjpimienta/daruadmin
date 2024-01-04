@@ -165,6 +165,7 @@ export class ProductsComponent implements OnInit {
       partnumber: '',
       sku: '',
       upc: '',
+      ean: '',
       category: [],
       subCategory: [],
       brand: '',
