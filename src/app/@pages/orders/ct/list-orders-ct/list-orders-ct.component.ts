@@ -66,7 +66,7 @@ export class ListOrdersCtComponent implements OnInit {
       {
         property: 'respuestaCT.fecha',
         label: 'Fecha',
-        class: 'clave'
+        class: 'fecha'
       },
       {
         property: 'respuestaCT.estatus',
