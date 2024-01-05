@@ -6,6 +6,7 @@ export const DELIVERY_FRAGMENT = gql`
       deliveryId
       cliente
       importe
+      discount
       registerDate
       user {
         id

@@ -90,6 +90,10 @@
                           <span *ngIf="val.class == 'fecha' && val.property=='creation_date'">
                             {{data.creation_date | date:'dd/MM/yyyy'}}
                           </span>
+                          <span *ngIf="val.class == 'id' && val.property=='venta'">
+                            <button type="button" class="btn btn-primary" (click)="openModal(content, data)"><i
+                                class="fas fa-info-circle"></i></button>
+                          </span>
                           <span *ngIf="val.class != 'fecha'">
                             <span *ngIf="val.class != 'numero'">
                               <span *ngIf="val.class != 'img'">
@@ -178,3 +182,59 @@
     </div>
   </div>
 </div>
+
+
+<!-- Standard Modal -->
+<ng-template #content role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title mt-0">Venta</h5>
+    <button type="button" class="btn-close" aria-hidden="true" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <!-- <div class="modal-body" [innerHTML]="data"></div> -->
+  <div class="modal-body">
+    <p>Cliente: {{data.user.name}} {{data.user.lastname}}</p>
+    <table>
+      <thead>
+        <tr>
+          <th colspan="2">Producto</th>
+          <th colspan="2">Cantidad</th>
+          <th colspan="2">Precio Unitario</th>
+          <th colspan="2">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let producto of productos">
+          <td colspan="2">{{producto.name}}</td>
+          <td colspan="2" class="number">{{producto.cantidad}}</td>
+          <td colspan="2" class="number">{{producto.precio.toFixed(2).toString()}}</td>
+          <td colspan="2" class="number">{{producto.total.toFixed(2).toString()}}</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+          <td colspan="2"><strong>Subtotal:</strong></td>
+          <td colspan="4" class="number">$ {{totalProd.toFixed(2).toString()}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+          <td colspan="2"><strong>Costo Envio:</strong></td>
+          <td colspan="4" class="number">$ {{totalEnvios}}</td>
+        </tr>
+        <tr *ngIf="discount > 0">
+          <td colspan="2">&nbsp;</td>
+          <td colspan="2"><strong>Descuento:</strong></td>
+          <td colspan="4" class="number">$ {{discount.toFixed(2).toString()}}</td>
+        </tr>
+        <tr>
+          <td colspan="2">&nbsp;</td>
+          <td colspan="2"><strong>Total:</strong></td>
+          <td colspan="4" class="number">$ {{total.toFixed(2).toString()}}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Cerrar</button>
+  </div>
+</ng-template>
