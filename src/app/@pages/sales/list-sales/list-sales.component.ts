@@ -72,7 +72,12 @@ export class ListSalesComponent implements OnInit {
       {
         property: 'registerDate',
         label: 'Fecha',
-        class: 'clave'
+        class: 'fecha'
+      },
+      {
+        property: 'venta',
+        label: 'Venta',
+        class: 'id'
       }
     ]
   }
@@ -91,6 +96,8 @@ export class ListSalesComponent implements OnInit {
         break;
       case 'info':                                      // Mostrar información del elemento
         console.log('unblock');
+        this.mostrarBoton = false;
+        // this.updateForm(catalog, true, true);
         break;
       case 'import':
         console.log('unblock');
