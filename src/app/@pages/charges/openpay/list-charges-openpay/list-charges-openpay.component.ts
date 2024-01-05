@@ -71,7 +71,7 @@ export class ListChargesOpenpayComponent implements OnInit {
       {
         property: 'creation_date',
         label: 'Fecha',
-        class: 'clave'
+        class: 'fecha'
       },
       {
         property: 'status',
