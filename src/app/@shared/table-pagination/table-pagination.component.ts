@@ -7,8 +7,9 @@ import { ACTIVE_FILTERS } from 'src/app/@core/constants/filters';
 import { Observable } from 'rxjs';
 import { closeAlert, loadData } from 'src/app/@shared/alert/alerts';
 import { map } from 'rxjs/operators';
-import { ImportarService } from '@shared/importar/importar.service';
 import { HttpClient } from '@angular/common/http';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Product } from '@core/models/product.models';
 
 @Component({
   selector: 'app-table-pagination',
@@ -45,11 +46,17 @@ export class TablePaginationComponent implements OnInit {
   totalData: number;
   tagFilter: string;
   private tiposPagos: any[] = [];
+  data: any;
+  productos: Product[];
+  totalProd = 0.0;
+  totalEnvios = 0;
+  discount = 0;
+  total = 0.0;
 
   constructor(
     private httpClient: HttpClient,
     private service: TablePaginationService,
-    private importarService: ImportarService,
+    private modalService: NgbModal,
   ) {
     service.$emitter.subscribe(() => {
       this.loadData();
@@ -167,5 +174,32 @@ export class TablePaginationComponent implements OnInit {
 
   async getTiposPagosCt(): Promise<any> {
     return await this.tiposPagosCt$.toPromise();
+  }
+
+  openModal(content: any, data: any) {
+    console.log('data: ', data);
+    this.data = data;
+
+
+    this.productos = [];
+    this.totalProd = 0.0;
+    this.totalEnvios = 0;
+    for (const idW of Object.keys(this.data.warehouses)) {
+      const warehouse = this.data.warehouses[idW];
+      for (const idP of Object.keys(warehouse.productShipments)) {
+        const prod = warehouse.productShipments[idP];
+        this.totalProd += (prod.precio * prod.cantidad);
+        this.productos.push(prod);
+      }
+      for (const idE of Object.keys(warehouse.shipments)) {
+        const ship = warehouse.shipments[idE];
+        this.totalEnvios += ship.costo;
+      }
+    }
+    this.discount = this.data.discount;
+    this.total = this.totalProd + this.totalEnvios - this.discount;
+
+
+    this.modalService.open(content);
   }
 }
