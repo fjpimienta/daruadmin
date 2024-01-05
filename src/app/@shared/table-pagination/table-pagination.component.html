@@ -81,48 +81,51 @@
                             {{ formatoMoneda(data[val.property], true) }}
                           </span> -->
                           <span *ngIf="val.class == 'numero'">{{ formatoMoneda(data[val.property], true) }}</span>
-                          <span *ngIf="val.class != 'numero'">
-                            <span *ngIf="val.class != 'img'">
-                              <span *ngIf="val.property=='suppliersProd.idProveedor'">
-                                {{data.suppliersProd.idProveedor.toUpperCase()}}
+                          <span *ngIf="val.class == 'fecha' && val.property=='registerDate'">
+                            {{data.registerDate | date:'dd/MM/yyyy'}}
+                          </span>
+                          <span *ngIf="val.class == 'fecha' && val.property=='respuestaCT.fecha'">
+                            {{data.respuestaCT.fecha | date:'dd/MM/yyyy'}}
+                          </span>
+                          <span *ngIf="val.class == 'fecha' && val.property=='creation_date'">
+                            {{data.creation_date | date:'dd/MM/yyyy'}}
+                          </span>
+                          <span *ngIf="val.class != 'fecha'">
+                            <span *ngIf="val.class != 'numero'">
+                              <span *ngIf="val.class != 'img'">
+                                <span *ngIf="val.property=='suppliersProd.idProveedor'">
+                                  {{data.suppliersProd.idProveedor.toUpperCase()}}
+                                </span>
+                                <span *ngIf="val.property=='product.name'">
+                                  {{data.product.name}}
+                                </span>
+                                <span *ngIf="val.property=='product.description'">
+                                  {{data.product.description}}
+                                </span>
+                                <span *ngIf="val.property=='client.name'">
+                                  {{data.client.name}} {{data.client.lastname}}
+                                </span>
+                                <span *ngIf="val.property=='user.name'">
+                                  {{data.user.name}} {{data.client.lastname}}
+                                </span>
+                                <span *ngIf="val.property=='respuestaCT.pedidoWeb'">
+                                  {{data.respuestaCT.pedidoWeb}}
+                                </span>
+                                <span *ngIf="val.property=='respuestaCT.estatus'">
+                                  {{data.respuestaCT.estatus}}
+                                </span>
+                                <span *ngIf="val.property === 'tipoPago'">
+                                  {{ getTipoPagoName(data.tipoPago) }}
+                                </span>
+                                <span
+                                  *ngIf="val.property!='product.description' && val.property!='product.description'">
+                                  {{ data[val.property]}}
+                                </span>
                               </span>
-                              <span *ngIf="val.property=='product.name'">
-                                {{data.product.name}}
+                              <span *ngIf="val.class == 'img'">
+                                <img src="{{ data[val.property]}}" class="img-fluid img-thumbnail mx-auto d-block"
+                                  alt="{{ data.name}}">
                               </span>
-                              <span *ngIf="val.property=='product.description'">
-                                {{data.product.description}}
-                              </span>
-                              <span *ngIf="val.property=='client.name'">
-                                {{data.client.name}} {{data.client.lastname}}
-                              </span>
-                              <span *ngIf="val.property=='user.name'">
-                                {{data.user.name}} {{data.client.lastname}}
-                              </span>
-                              <span *ngIf="val.property=='respuestaCT.pedidoWeb'">
-                                {{data.respuestaCT.pedidoWeb}}
-                              </span>
-                              <span *ngIf="val.property=='respuestaCT.fecha'">
-                                {{data.respuestaCT.fecha | date:'dd/MM/yyyy'}}
-                              </span>
-                              <span *ngIf="val.property=='registerDate'">
-                                {{data.registerDate | date:'dd/MM/yyyy'}}
-                              </span>
-                              <span *ngIf="val.property=='creation_date'">
-                                {{data.creation_date | date:'dd/MM/yyyy'}}
-                              </span>
-                              <span *ngIf="val.property=='respuestaCT.estatus'">
-                                {{data.respuestaCT.estatus}}
-                              </span>
-                              <span *ngIf="val.property === 'tipoPago'">
-                                {{ getTipoPagoName(data.tipoPago) }}
-                              </span>
-                              <span *ngIf="val.property!='product.description' && val.property!='product.description'">
-                                {{ data[val.property]}}
-                              </span>
-                            </span>
-                            <span *ngIf="val.class == 'img'">
-                              <img src="{{ data[val.property]}}" class="img-fluid img-thumbnail mx-auto d-block"
-                                alt="{{ data.name}}">
                             </span>
                           </span>
                         </span>

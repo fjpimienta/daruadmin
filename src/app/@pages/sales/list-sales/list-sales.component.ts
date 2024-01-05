@@ -72,7 +72,7 @@ export class ListSalesComponent implements OnInit {
       {
         property: 'registerDate',
         label: 'Fecha',
-        class: 'clave'
+        class: 'fecha'
       }
     ]
   }
