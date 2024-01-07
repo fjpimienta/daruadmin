@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TablePaginationComponent } from './table-pagination.component';
-import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbNavModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { UIModule } from '@shared/ui/ui.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,9 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     NgbDropdownModule,
     NgbPaginationModule,
-    FormsModule
+    FormsModule,
+    UIModule,
+    NgbNavModule
   ],
   exports: [
     TablePaginationComponent

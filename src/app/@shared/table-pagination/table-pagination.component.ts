@@ -177,10 +177,7 @@ export class TablePaginationComponent implements OnInit {
   }
 
   openModal(content: any, data: any) {
-    console.log('data: ', data);
     this.data = data;
-
-
     this.productos = [];
     this.totalProd = 0.0;
     this.totalEnvios = 0;
@@ -199,7 +196,6 @@ export class TablePaginationComponent implements OnInit {
     this.discount = this.data.discount;
     this.total = this.totalProd + this.totalEnvios - this.discount;
 
-
-    this.modalService.open(content);
+    this.modalService.open(content, { size: 'lg', centered: true });
   }
 }
