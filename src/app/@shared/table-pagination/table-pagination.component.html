@@ -187,52 +187,85 @@
 <!-- Standard Modal -->
 <ng-template #content role="document" let-modal>
   <div class="modal-header">
-    <h5 class="modal-title mt-0">Venta</h5>
+    <h5 class="modal-title mt-0">Datos de la Venta</h5>
     <button type="button" class="btn-close" aria-hidden="true" (click)="modal.dismiss('Cross click')"></button>
   </div>
-  <!-- <div class="modal-body" [innerHTML]="data"></div> -->
   <div class="modal-body">
-    <p>Cliente: {{data.user.name}} {{data.user.lastname}}</p>
-    <table>
-      <thead>
-        <tr>
-          <th colspan="2">Producto</th>
-          <th colspan="2">Cantidad</th>
-          <th colspan="2">Precio Unitario</th>
-          <th colspan="2">Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let producto of productos">
-          <td colspan="2">{{producto.name}}</td>
-          <td colspan="2" class="number">{{producto.cantidad}}</td>
-          <td colspan="2" class="number">{{producto.precio.toFixed(2).toString()}}</td>
-          <td colspan="2" class="number">{{producto.total.toFixed(2).toString()}}</td>
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="2">&nbsp;</td>
-          <td colspan="2"><strong>Subtotal:</strong></td>
-          <td colspan="4" class="number">$ {{totalProd.toFixed(2).toString()}}</td>
-        </tr>
-        <tr>
-          <td colspan="2">&nbsp;</td>
-          <td colspan="2"><strong>Costo Envio:</strong></td>
-          <td colspan="4" class="number">$ {{totalEnvios}}</td>
-        </tr>
-        <tr *ngIf="discount > 0">
-          <td colspan="2">&nbsp;</td>
-          <td colspan="2"><strong>Descuento:</strong></td>
-          <td colspan="4" class="number">$ {{discount.toFixed(2).toString()}}</td>
-        </tr>
-        <tr>
-          <td colspan="2">&nbsp;</td>
-          <td colspan="2"><strong>Total:</strong></td>
-          <td colspan="4" class="number">$ {{total.toFixed(2).toString()}}</td>
-        </tr>
-      </tfoot>
-    </table>
+    <div class="card">
+      <div class="card-body">
+        <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav-tabs">
+          <li [ngbNavItem]="1">
+            <a ngbNavLink>
+              <span class="d-block d-sm-none"><i class="fas fa-home"></i></span>
+              <span class="d-none d-sm-block">Productos</span>
+            </a>
+            <ng-template ngbNavContent>
+              <br>
+              <h5>Cliente: {{data.user.name}} {{data.user.lastname}}</h5>
+              <table>
+                <thead>
+                  <tr>
+                    <th class="text-center thead-class">Producto</th>
+                    <th class="text-center thead-class">Cantidad</th>
+                    <th class="text-center thead-class">Precio Unitario</th>
+                    <th class="text-center thead-class">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let producto of productos">
+                    <td>{{producto.name}}</td>
+                    <td class="text-center">{{producto.cantidad}}</td>
+                    <td class="text-right custom-class">{{producto.precio.toFixed(2).toString()}}</td>
+                    <td class="text-right custom-class">{{producto.total.toFixed(2).toString()}}</td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td><strong>Subtotal:</strong></td>
+                    <td class="text-right">$ {{totalProd.toFixed(2).toString()}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td><strong>Costo Envio:</strong></td>
+                    <td class="text-right">$ {{totalEnvios}}</td>
+                  </tr>
+                  <tr *ngIf="discount > 0">
+                    <td colspan="2">&nbsp;</td>
+                    <td><strong>Descuento:</strong></td>
+                    <td class="text-right">$ {{discount.toFixed(2).toString()}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td><strong>Total:</strong></td>
+                    <td class="text-right">$ {{total.toFixed(2).toString()}}</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="2">
+            <a ngbNavLink>
+              <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
+              <span class="d-none d-sm-block">Envio</span>
+            </a>
+            <ng-template ngbNavContent>
+
+            </ng-template>
+          </li>
+          <li [ngbNavItem]="3">
+            <a ngbNavLink>
+              <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+              <span class="d-none d-sm-block">Cliente</span>
+            </a>
+            <ng-template ngbNavContent>
+
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav"></div>
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-light" (click)="modal.close('Close click')">Cerrar</button>

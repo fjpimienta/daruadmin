@@ -47,8 +47,6 @@
   text-align: center;
 }
 
-
-
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -85,9 +83,9 @@ th {
   text-align: left;
   font-weight: bold;
 }
-.number th {
-  text-align: right;
-  font-weight: bold;
+.number tbody th {
+  text-align: right !important;
+  font-weight: bold !important;
 }
 tfoot td {
   text-align: right;
@@ -96,4 +94,10 @@ tfoot td {
 foot {
   color: #666666;
   font-size: 8px; /* Tamaño de letra de los párrafos */
+}
+.custom-class {
+  text-align: right !important;
+}
+.thead-class {
+  text-align: center !important;
 }
