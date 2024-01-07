@@ -1,0 +1,12 @@
+.auth-pass-inputgroup {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+#password-addon {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
