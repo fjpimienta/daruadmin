@@ -81,10 +81,10 @@
                     </div>
                     <label for="userpassword">Clave</label>
                     <div class="input-group auth-pass-inputgroup">
-                      <input type="password" class="form-control" formControlName="password"
+                      <input type="password" class="form-control" formControlName="password" id="password"
                         [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="Teclea la clave"
                         aria-label="Password" aria-describedby="password-addon">
-                      <button class="btn btn-light " type="button" id="password-addon"><i
+                      <button class="btn btn-light " type="button" id="password-addon" (click)="togglePasswordVisibility()"><i
                           class="mdi mdi-eye-outline"></i></button>
                       <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                         <span *ngIf="f.password.errors.required">Clave requerida</span>
