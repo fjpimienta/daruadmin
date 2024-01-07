@@ -247,19 +247,38 @@
           <li [ngbNavItem]="2">
             <a ngbNavLink>
               <span class="d-block d-sm-none"><i class="far fa-user"></i></span>
-              <span class="d-none d-sm-block">Envio</span>
+              <span class="d-none d-sm-block">Cliente</span>
             </a>
             <ng-template ngbNavContent>
-
+              <div class="client">
+                <h6>Datos del Usuario</h6>
+                <p><strong>Nombre(s): </strong>{{data.user.name}}</p>
+                <p><strong>Apellido(s): </strong> {{data.user.lastname}}</p>
+                <p><strong>Teléfono: </strong>{{data.user.phone}}</p>
+                <p><strong>Email: </strong>{{data.user.email}}</p>
+              </div>
             </ng-template>
           </li>
           <li [ngbNavItem]="3">
             <a ngbNavLink>
               <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
-              <span class="d-none d-sm-block">Cliente</span>
+              <span class="d-none d-sm-block">Direcci&oacute;n de Env&iacute;o</span>
             </a>
             <ng-template ngbNavContent>
-
+              <div class="address">
+                <h6>Dirección de entrega</h6>
+                <p><strong>Calle: </strong>{{data.user.addresses[0].directions}}</p>
+                <p><strong>Número exterior: </strong> {{data.user.addresses[0].outdoorNumber}}</p>
+                <p *ngIf="data.user.addresses[0].interiorNumber!=''"><strong>Número
+                    interior: </strong>{{data.user.addresses[0].interiorNumber}}</p>
+                <p><strong>Colonia: </strong>{{data.user.addresses[0].d_asenta}}</p>
+                <p><strong>Código postal: </strong>{{data.user.addresses[0].d_codigo}}</p>
+                <p><strong>Municipio: </strong>{{data.user.addresses[0].d_mnpio}}</p>
+                <p><strong>Estado: </strong>{{data.user.addresses[0].d_estado}}</p>
+                <p><strong>País: </strong>{{data.user.addresses[0].d_pais}}</p>
+                <p><strong>Teléfono: </strong>{{data.user.addresses[0].phone}}</p>
+                <p><strong>Referencias: </strong>{{data.user.addresses[0].references}}</p>
+              </div>
             </ng-template>
           </li>
         </ul>
