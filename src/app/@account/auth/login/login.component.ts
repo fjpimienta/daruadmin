@@ -113,4 +113,22 @@ export class LoginComponent implements OnInit {
       localStorage.setItem('remember', 'false');
     }
   }
+
+  togglePasswordVisibility() {
+    var passwordInput = document.getElementById("password") as HTMLInputElement;
+    var toggleBtn = document.getElementById("password-addon");
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      if (toggleBtn) {
+        toggleBtn.textContent = "Ocultar";
+      }
+    } else {
+      passwordInput.type = "password";
+      if (toggleBtn) {
+        toggleBtn.textContent = "Mostrar";
+      }
+    }
+  }
+
 }
