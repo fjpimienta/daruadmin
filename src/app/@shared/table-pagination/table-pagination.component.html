@@ -281,6 +281,26 @@
               </div>
             </ng-template>
           </li>
+          <li [ngbNavItem]="4">
+            <a ngbNavLink>
+              <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+              <span class="d-none d-sm-block">Facturaci&oacute;n</span>
+            </a>
+            <ng-template ngbNavContent>
+              <div class="address">
+                <h6>Datos de Facturaci&oacute;n</h6>
+                <p *ngIf="data.invoiceConfig.nombreEmpresa == ''"><strong>Nombre(s): </strong>{{data.invoiceConfig.nombres}}</p>
+                <p *ngIf="data.invoiceConfig.nombreEmpresa == ''"><strong>Apellido(s): </strong> {{data.invoiceConfig.apellidos}}</p>
+                <p *ngIf="data.invoiceConfig.nombreEmpresa != ''"><strong>Nombre de la Empresa: </strong>{{data.invoiceConfig.nombreEmpresa}}</p>
+                <p><strong>RFC: </strong>{{data.invoiceConfig.rfc}}</p>
+                <p><strong>Codigo Postal: </strong>{{data.invoiceConfig.codigoPostal}}</p>
+                <p><strong>Forma de Pago: </strong>{{data.invoiceConfig.formaPago.descripcion}}</p>
+                <p><strong>M&eacute;todo de Pago: </strong>{{data.invoiceConfig.metodoPago.descripcion}}</p>
+                <p><strong>R&eacute;gimen Fiscal: </strong>{{data.invoiceConfig.regimenFiscal.descripcion}}</p>
+                <p><strong>Uso de CFDI: </strong>{{data.invoiceConfig.usoCFDI.descripcion}}</p>
+              </div>
+            </ng-template>
+          </li>
         </ul>
         <div [ngbNavOutlet]="nav"></div>
       </div>
