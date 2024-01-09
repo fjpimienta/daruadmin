@@ -283,6 +283,29 @@ export const DELIVERY_FRAGMENT = gql`
         agentemail
         almacenmail
       }
+      invoiceConfig {
+        nombres
+        apellidos
+        nombreEmpresa
+        rfc
+        codigoPostal
+        formaPago {
+          id
+          descripcion
+        }
+        metodoPago {
+          id
+          descripcion
+        }
+        regimenFiscal {
+          id
+          descripcion
+        }
+        usoCFDI {
+          id
+          descripcion
+        }
+      }
       statusError
       messageError
     }
