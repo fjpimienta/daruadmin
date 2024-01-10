@@ -1167,6 +1167,7 @@ export class ImportarComponent implements OnInit {
             itemData.slug = slugify(item.descripcion, { lower: true });
             itemData.short_desc = item.clave + '. Grupo: ' + item.grupo;
             itemData.price = parseFloat(item.precio) * this.utilidad * this.iva;
+            itemData.sale_price = parseFloat(item.precio) * this.utilidad * this.iva;
             itemData.review = 0;
             itemData.ratings = 0;
             itemData.until = this.getFechas(new Date());
@@ -1176,6 +1177,7 @@ export class ImportarComponent implements OnInit {
               desc.moneda_descuento = item.MonedaDescuento;
               desc.precio_descuento = item.PrecioDescuento === '' ? 0 : parseFloat(item.PrecioDescuento) * this.utilidad * this.iva;
               salePrice = desc.precio_descuento;
+              itemData.sale_price = parseFloat(item.PrecioDescuento) * this.utilidad * this.iva;
             }
             itemData.descuentos = desc;
             if (item.DisponibleEnPromocion !== 'Sin Descuento') {
@@ -1185,7 +1187,6 @@ export class ImportarComponent implements OnInit {
               promo.disponible_en_promocion = item.DisponibleEnPromocion === '' ? 0 : parseFloat(item.DisponibleEnPromocion) * this.utilidad * this.iva;
               promo.porciento = 0;
             }
-            itemData.sale_price = salePrice;
             itemData.featured = (item.PrecioDescuento > 0 && item.PrecioDescuento < item.precio) ? true : false;
             itemData.exchangeRate = item.tipocambio > 0 ? item.tipocambio : this.exchangeRate;
             itemData.promociones = promo;
