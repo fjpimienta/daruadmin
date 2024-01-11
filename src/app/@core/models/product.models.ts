@@ -115,6 +115,7 @@ export class SupplierProd {
   idProveedor: string;
   codigo: string;
   price: number;
+  sale_price: number;
   moneda: string;
   branchOffices: BranchOffices[];
   category: Categorys;

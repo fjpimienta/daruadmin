@@ -1167,7 +1167,6 @@ export class ImportarComponent implements OnInit {
             itemData.slug = slugify(item.descripcion, { lower: true });
             itemData.short_desc = item.clave + '. Grupo: ' + item.grupo;
             itemData.price = parseFloat(item.precio) * this.utilidad * this.iva;
-            itemData.sale_price = parseFloat(item.precio) * this.utilidad * this.iva;
             itemData.review = 0;
             itemData.ratings = 0;
             itemData.until = this.getFechas(new Date());
@@ -1177,7 +1176,6 @@ export class ImportarComponent implements OnInit {
               desc.moneda_descuento = item.MonedaDescuento;
               desc.precio_descuento = item.PrecioDescuento === '' ? 0 : parseFloat(item.PrecioDescuento) * this.utilidad * this.iva;
               salePrice = desc.precio_descuento;
-              itemData.sale_price = parseFloat(item.PrecioDescuento) * this.utilidad * this.iva;
             }
             itemData.descuentos = desc;
             if (item.DisponibleEnPromocion !== 'Sin Descuento') {
@@ -1187,6 +1185,7 @@ export class ImportarComponent implements OnInit {
               promo.disponible_en_promocion = item.DisponibleEnPromocion === '' ? 0 : parseFloat(item.DisponibleEnPromocion) * this.utilidad * this.iva;
               promo.porciento = 0;
             }
+            itemData.sale_price = salePrice;
             itemData.featured = (item.PrecioDescuento > 0 && item.PrecioDescuento < item.precio) ? true : false;
             itemData.exchangeRate = item.tipocambio > 0 ? item.tipocambio : this.exchangeRate;
             itemData.promociones = promo;
@@ -1236,8 +1235,9 @@ export class ImportarComponent implements OnInit {
             // SupplierProd
             s.idProveedor = proveedor;
             s.codigo = item.clave;
-            s.price = parseFloat(item.precio) * this.utilidad * this.iva;
-            s.moneda = 'MXN';
+            s.price = item.precio;
+            s.sale_price = item.PrecioDescuento === '' ? 0 : parseFloat(item.PrecioDescuento);
+            s.moneda = item.moneda === 'Pesos' ? 'MXN' : 'USD';
             s.branchOffices = branchOffices;
             s.category = new Categorys();
             s.subCategory = new Categorys();
@@ -1309,7 +1309,7 @@ export class ImportarComponent implements OnInit {
               itemData.price = parseFloat((parseFloat(item.precio) * this.exchangeRate * this.utilidad * this.iva).toFixed(2));
               itemData.sale_price = parseFloat((salePrice * this.exchangeRate * this.utilidad * this.iva).toFixed(2));
             } else {
-              itemData.price = parseFloat(item.precio) * this.utilidad * this.iva;
+              itemData.price = parseFloat((parseFloat(item.precio) * this.utilidad * this.iva).toFixed(2));
               itemData.sale_price = salePrice * this.utilidad * this.iva;
             }
             itemData.exchangeRate = this.exchangeRate;
@@ -1367,9 +1367,11 @@ export class ImportarComponent implements OnInit {
             if (itemData.promociones && (
               itemData.promociones.disponible_en_promocion > 0 || itemData.promociones.porciento > 0)) {
               const precioPromocion = (parseFloat(item.precio) - (parseFloat(item.precio) * itemData.promociones.porciento / 100)).toFixed(2);
-              s.price = parseFloat(precioPromocion);
+              s.price = parseFloat(item.precio);
+              s.sale_price = parseFloat(precioPromocion);
             } else {
               s.price = parseFloat(item.precio);
+              s.sale_price = 0;
             }
             s.moneda = item.moneda;
             s.branchOffices = branchOfficesCt;
@@ -1387,14 +1389,12 @@ export class ImportarComponent implements OnInit {
             itemData.model = productJson.modelo;
             // Imagenes
             itemData.pictures = [];
-            // const i = new Picture();
             i.width = '600';
             i.height = '600';
             i.url = productJson.imagen;
             itemData.pictures.push(i);
             // Imagenes pequeñas
             itemData.sm_pictures = [];
-            // const is = new Picture();
             is.width = '300';
             is.height = '300';
             is.url = productJson.imagen;
