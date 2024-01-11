@@ -1159,6 +1159,7 @@ export class ImportarComponent implements OnInit {
         let branchOffices: BranchOffices[] = [];
         let disponibilidadAlmacenes = 0;
         if (item.ExsTotal >= this.stockMinimo) {                  // Si existencias totales.
+          let featured = false;
           branchOffices = this.setCvaAlmacenes(item);
           if (branchOffices.length > 0) {
             disponibilidadAlmacenes = branchOffices[0].cantidad;
@@ -1186,7 +1187,8 @@ export class ImportarComponent implements OnInit {
               promo.porciento = 0;
             }
             itemData.sale_price = salePrice;
-            itemData.featured = (item.PrecioDescuento > 0 && item.PrecioDescuento < item.precio) ? true : false;
+            featured = (item.PrecioDescuento > 0 && item.PrecioDescuento < item.precio) ? true : false;
+            itemData.featured = featured;
             itemData.exchangeRate = item.tipocambio > 0 ? item.tipocambio : this.exchangeRate;
             itemData.promociones = promo;
             itemData.new = false;
@@ -1368,7 +1370,7 @@ export class ImportarComponent implements OnInit {
               itemData.promociones.disponible_en_promocion > 0 || itemData.promociones.porciento > 0)) {
               const precioPromocion = (parseFloat(item.precio) - (parseFloat(item.precio) * itemData.promociones.porciento / 100)).toFixed(2);
               s.price = parseFloat(item.precio);
-              s.sale_price = parseFloat(precioPromocion);
+              s.sale_price = parseFloat(item.almacenes[0].promociones[0].precio);
             } else {
               s.price = parseFloat(item.precio);
               s.sale_price = 0;
