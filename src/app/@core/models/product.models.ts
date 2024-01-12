@@ -1,23 +1,26 @@
 export class ProductExport {
-  slug?: string;
-  brand: string;
+  name?: string;
+  price: number;
+  sale_price: number;
   partnumber: string;
+  brand: string;
+  exchangeRate: number;
+  stock: number;
   sku: string;
+  suppliersProd?: SupplierProd;
+  descuentos: Descuentos;
+  promociones: Promociones;
   upc: string;
   ean: string;
 }
 
 export class Product extends ProductExport {
   id?: number;
-  name?: string;
+  slug?: string;
   short_desc?: string;
-  price: number;
-  sale_price: number;
-  exchangeRate: number;
   review: number;
   ratings: number;
   until: string;
-  stock: number;
   top: boolean;
   featured: boolean;
   new: boolean;
@@ -34,9 +37,6 @@ export class Product extends ProductExport {
   variants?: Variant[];
   unidadDeMedida?: UnidadDeMedida;
   active: boolean;
-  suppliersProd?: SupplierProd;
-  descuentos: Descuentos;
-  promociones: Promociones;
   especificaciones: Especificacion[];
 }
 
@@ -115,6 +115,7 @@ export class SupplierProd {
   idProveedor: string;
   codigo: string;
   price: number;
+  sale_price: number;
   moneda: string;
   branchOffices: BranchOffices[];
   category: Categorys;
@@ -164,4 +165,18 @@ export class AddProduct {
   list: Product[];
   suppliersProd?: SupplierProd;
   files?: File[];
+}
+
+export class ProductExportInterno {
+  ID: number;
+  NOMBRE_DEL_PRODUCTO: string;
+  PRECIO_COMPRA: number;
+  PRECIO_VENTA: number;
+  PRECIO_PROVEEDOR: number;
+  PRECIO_DESCUENTO_PROVEEDOR: number;
+  MARCA: string;
+  TIPO_DE_CAMBIO: number;
+  EXISTENCIA: number;
+  SKU: string;
+  PROVEEDOR: string;
 }

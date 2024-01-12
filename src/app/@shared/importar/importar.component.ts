@@ -443,10 +443,17 @@ export class ImportarComponent implements OnInit {
             // Setear dataExport
             productos.forEach(item => {
               const newItemExport = new ProductExport();
-              newItemExport.slug = item.slug;
-              newItemExport.brand = item.brand;
+              newItemExport.name = item.name;
+              newItemExport.price = item.price;
+              newItemExport.sale_price = item.sale_price;
               newItemExport.partnumber = item.partnumber;
+              newItemExport.brand = item.brand;
+              newItemExport.exchangeRate = item.exchangeRate;
+              newItemExport.stock = item.stock;
               newItemExport.sku = item.sku;
+              newItemExport.suppliersProd = item.suppliersProd;
+              newItemExport.descuentos = item.descuentos;
+              newItemExport.promociones = item.promociones;
               newItemExport.upc = item.upc;
               newItemExport.ean = item.ean;
               this.dataExport.push(newItemExport);
@@ -1159,6 +1166,7 @@ export class ImportarComponent implements OnInit {
         let branchOffices: BranchOffices[] = [];
         let disponibilidadAlmacenes = 0;
         if (item.ExsTotal >= this.stockMinimo) {                  // Si existencias totales.
+          let featured = false;
           branchOffices = this.setCvaAlmacenes(item);
           if (branchOffices.length > 0) {
             disponibilidadAlmacenes = branchOffices[0].cantidad;
@@ -1186,7 +1194,8 @@ export class ImportarComponent implements OnInit {
               promo.porciento = 0;
             }
             itemData.sale_price = salePrice;
-            itemData.featured = (item.PrecioDescuento > 0 && item.PrecioDescuento < item.precio) ? true : false;
+            featured = (item.PrecioDescuento > 0 && item.PrecioDescuento < item.precio) ? true : false;
+            itemData.featured = featured;
             itemData.exchangeRate = item.tipocambio > 0 ? item.tipocambio : this.exchangeRate;
             itemData.promociones = promo;
             itemData.new = false;
@@ -1235,8 +1244,9 @@ export class ImportarComponent implements OnInit {
             // SupplierProd
             s.idProveedor = proveedor;
             s.codigo = item.clave;
-            s.price = parseFloat(item.precio) * this.utilidad * this.iva;
-            s.moneda = 'MXN';
+            s.price = item.precio;
+            s.sale_price = item.PrecioDescuento === '' ? 0 : parseFloat(item.PrecioDescuento);
+            s.moneda = item.moneda === 'Pesos' ? 'MXN' : 'USD';
             s.branchOffices = branchOffices;
             s.category = new Categorys();
             s.subCategory = new Categorys();
@@ -1308,7 +1318,7 @@ export class ImportarComponent implements OnInit {
               itemData.price = parseFloat((parseFloat(item.precio) * this.exchangeRate * this.utilidad * this.iva).toFixed(2));
               itemData.sale_price = parseFloat((salePrice * this.exchangeRate * this.utilidad * this.iva).toFixed(2));
             } else {
-              itemData.price = parseFloat(item.precio) * this.utilidad * this.iva;
+              itemData.price = parseFloat((parseFloat(item.precio) * this.utilidad * this.iva).toFixed(2));
               itemData.sale_price = salePrice * this.utilidad * this.iva;
             }
             itemData.exchangeRate = this.exchangeRate;
@@ -1366,9 +1376,11 @@ export class ImportarComponent implements OnInit {
             if (itemData.promociones && (
               itemData.promociones.disponible_en_promocion > 0 || itemData.promociones.porciento > 0)) {
               const precioPromocion = (parseFloat(item.precio) - (parseFloat(item.precio) * itemData.promociones.porciento / 100)).toFixed(2);
-              s.price = parseFloat(precioPromocion);
+              s.price = parseFloat(item.precio);
+              s.sale_price = parseFloat(item.almacenes[0].promociones[0].precio);
             } else {
               s.price = parseFloat(item.precio);
+              s.sale_price = 0;
             }
             s.moneda = item.moneda;
             s.branchOffices = branchOfficesCt;
@@ -1386,14 +1398,12 @@ export class ImportarComponent implements OnInit {
             itemData.model = productJson.modelo;
             // Imagenes
             itemData.pictures = [];
-            // const i = new Picture();
             i.width = '600';
             i.height = '600';
             i.url = productJson.imagen;
             itemData.pictures.push(i);
             // Imagenes pequeñas
             itemData.sm_pictures = [];
-            // const is = new Picture();
             is.width = '300';
             is.height = '300';
             is.url = productJson.imagen;
