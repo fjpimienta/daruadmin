@@ -110,6 +110,7 @@ export interface ISupplierProd {
   idProveedor: string;
   codigo: string;
   price: number;
+  sale_price: number;
   moneda: string;
   branchOffices: IBranchOffices[];
 }
