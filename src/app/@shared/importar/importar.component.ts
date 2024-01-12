@@ -443,10 +443,17 @@ export class ImportarComponent implements OnInit {
             // Setear dataExport
             productos.forEach(item => {
               const newItemExport = new ProductExport();
-              newItemExport.slug = item.slug;
-              newItemExport.brand = item.brand;
+              newItemExport.name = item.name;
+              newItemExport.price = item.price;
+              newItemExport.sale_price = item.sale_price;
               newItemExport.partnumber = item.partnumber;
+              newItemExport.brand = item.brand;
+              newItemExport.exchangeRate = item.exchangeRate;
+              newItemExport.stock = item.stock;
               newItemExport.sku = item.sku;
+              newItemExport.suppliersProd = item.suppliersProd;
+              newItemExport.descuentos = item.descuentos;
+              newItemExport.promociones = item.promociones;
               newItemExport.upc = item.upc;
               newItemExport.ean = item.ean;
               this.dataExport.push(newItemExport);

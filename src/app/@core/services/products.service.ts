@@ -64,12 +64,18 @@ export class ProductsService extends ApiService {
       );
   }
 
-  getProducts(page: number = 1, itemsPage: number = 10, filterActiveValues: ACTIVE_FILTERS = ACTIVE_FILTERS.ACTIVE) {
-    return this.get(PRODUCTS_LIST_QUERY, {
-      itemsPage, page, filterActiveValues
-    }).pipe(map((result: any) => {
-      return result.products;
-    }));
+  async getProducts(page: number = 1, itemsPage: number = 10, filterActiveValues: ACTIVE_FILTERS = ACTIVE_FILTERS.ACTIVE): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.get(PRODUCTS_LIST_QUERY, {
+        itemsPage, page, filterActiveValues
+      }, {}).subscribe(
+        (result: any) => {
+          resolve(result.products);
+        },
+        (error: any) => {
+          reject(error);
+        });
+    });
   }
 
   async getProduct(): Promise<any> {

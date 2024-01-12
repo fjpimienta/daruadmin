@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ACTIVE_FILTERS } from '@core/constants/filters';
-import { IResultData } from '@core/interfaces/result-data.interface';
+import { IInfoPage, IResultData } from '@core/interfaces/result-data.interface';
 import { ITableColumns } from '@core/interfaces/table-columns.interface';
-import { Product } from '@core/models/product.models';
+import { Product, ProductExport, ProductExportInterno } from '@core/models/product.models';
 import { ProductsService } from '@core/services/products.service';
 import { PRODUCTS_LIST_QUERY } from '@graphql/operations/query/product';
 import { loadData, optionsWithDetails } from '@shared/alert/alerts';
@@ -12,6 +12,7 @@ import { CaptureProdComponent } from '@shared/capture-prod/capture-prod.componen
 import { ImportarComponent } from '@shared/importar/importar.component';
 import { TablePaginationService } from '@shared/table-pagination/table-pagination.service';
 import { DocumentNode } from 'graphql';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-products',
@@ -32,7 +33,10 @@ export class ProductsComponent implements OnInit {
   nextId: string;
   title = 'Catálogo de Productos';
   mostrarImport = true;
+  mostrarExport = true;
   importados: [Product];
+  dataExports = [];
+  infoPage: IInfoPage;
 
   @ViewChild('mdCaptureProd') modal: CaptureProdComponent;
   @ViewChild('mdImportProd') modalImport: ImportarComponent;
@@ -132,6 +136,9 @@ export class ProductsComponent implements OnInit {
       case 'import':
         this.importForm([product]);
         break;
+      case 'export':
+        this.exportForm();
+        break;
       case 'block':                                     // Bloquear elemento
         this.unblockForm(product, false);
         break;
@@ -195,6 +202,43 @@ export class ProductsComponent implements OnInit {
 
   private async importForm(product: [Product]) {
     this.modalImport.onOpenModalProduct(product);
+  }
+
+  private async exportForm() {
+    this.infoPage = {
+      page: 1,
+      pages: 10,
+      itemsPage: this.itemsPage,
+      total: 1
+    };
+    const variables = {
+      page: this.infoPage.page,
+      itemsPage: this.infoPage.itemsPage,
+      include: this.include,
+      active: this.filterActiveValues,
+      filterName: '',
+      role: ''
+    };
+    const productos = await this.productsService.getProducts(1, -1, ACTIVE_FILTERS.ACTIVE);
+    console.log('productos: ', productos);
+    this.dataExports = [];
+    productos.products.forEach(item => {
+      const newItemExport = new ProductExportInterno();
+      newItemExport.ID = item.id;
+      newItemExport.NOMBRE_DEL_PRODUCTO = item.name;
+      newItemExport.PRECIO_COMPRA = item.suppliersProd.sale_price > 0 ? item.suppliersProd.sale_price : item.suppliersProd.price;
+      newItemExport.PRECIO_VENTA = item.sale_price > 0 ? item.sale_price : item.price;
+      newItemExport.PRECIO_PROVEEDOR = item.suppliersProd.price;
+      newItemExport.PRECIO_DESCUENTO_PROVEEDOR = item.suppliersProd.sale_price;
+      newItemExport.MARCA = item.brand;
+      newItemExport.TIPO_DE_CAMBIO = item.exchangeRate;
+      newItemExport.EXISTENCIA = item.stock;
+      newItemExport.SKU = item.sku;
+      newItemExport.PROVEEDOR = item.suppliersProd.idProveedor;
+      this.dataExports.push(newItemExport);
+    });
+    console.log('this.dataExports: ', this.dataExports);
+
   }
 
   productBack(event) {
