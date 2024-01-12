@@ -29,6 +29,7 @@ export class TablePaginationComponent implements OnInit {
   @Input() onlyCupons = false;
   @Input() mostrarBoton = true;
   @Input() mostrarImport = false;
+  @Input() mostrarExport = false;
   @Input() mostrarAgregar = true;
   @Input() mostrarActivos = true;
   @Input() resultData: IResultData;

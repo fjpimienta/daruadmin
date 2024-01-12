@@ -55,6 +55,8 @@
                   class="fas fa-search"></i></button>
               <button *ngIf="mostrarImport" type="button" class="btn btn-light mb-2" title="Importar"
                 (click)="manageAction('import', null)"><i class="fas fa-bars"></i></button>
+              <button *ngIf="mostrarExport" type="button" class="btn btn-light mb-2" title="Exportar"
+                (click)="manageAction('export', null)"><i class="fas fa-file-export"></i></button>
               <button *ngIf="mostrarAgregar" type="button" class="btn btn-light mb-2" title="Agregar"
                 (click)="manageAction('add', null)"><i class="fas fa-plus-circle"></i></button>
             </div>
