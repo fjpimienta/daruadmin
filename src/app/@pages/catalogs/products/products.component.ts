@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ACTIVE_FILTERS } from '@core/constants/filters';
 import { IInfoPage, IResultData } from '@core/interfaces/result-data.interface';
 import { ITableColumns } from '@core/interfaces/table-columns.interface';
-import { Product, ProductExport, ProductExportInterno } from '@core/models/product.models';
+import { Product, ProductExportInterno } from '@core/models/product.models';
 import { ProductsService } from '@core/services/products.service';
 import { PRODUCTS_LIST_QUERY } from '@graphql/operations/query/product';
 import { loadData, optionsWithDetails } from '@shared/alert/alerts';
@@ -12,7 +12,7 @@ import { CaptureProdComponent } from '@shared/capture-prod/capture-prod.componen
 import { ImportarComponent } from '@shared/importar/importar.component';
 import { TablePaginationService } from '@shared/table-pagination/table-pagination.service';
 import { DocumentNode } from 'graphql';
-import { map } from 'rxjs/operators';
+import * as Papa from 'papaparse';
 
 @Component({
   selector: 'app-products',
@@ -220,7 +220,6 @@ export class ProductsComponent implements OnInit {
       role: ''
     };
     const productos = await this.productsService.getProducts(1, -1, ACTIVE_FILTERS.ACTIVE);
-    console.log('productos: ', productos);
     this.dataExports = [];
     productos.products.forEach(item => {
       const newItemExport = new ProductExportInterno();
@@ -237,8 +236,21 @@ export class ProductsComponent implements OnInit {
       newItemExport.PROVEEDOR = item.suppliersProd.idProveedor;
       this.dataExports.push(newItemExport);
     });
-    console.log('this.dataExports: ', this.dataExports);
+    this.exportToCSV();
+  }
 
+  exportToCSV() {
+    const csv = Papa.unparse(this.dataExports);
+    // Crear un objeto Blob para el archivo CSV
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    // Crear un enlace para descargar el archivo CSV
+    const enlace = document.createElement('a');
+    enlace.href = URL.createObjectURL(blob);
+    enlace.download = 'productos.csv';
+    // Agregar el enlace al DOM y simular un clic
+    document.body.appendChild(enlace);
+    enlace.click();
+    document.body.removeChild(enlace);
   }
 
   productBack(event) {
