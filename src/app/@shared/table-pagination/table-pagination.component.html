@@ -366,6 +366,7 @@
                         <th>Codigo</th>
                         <th>Mensaje</th>
                         <th>Referencia</th>
+                        <th>Paqueteria</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -375,6 +376,7 @@
                         <td>{{data.orderCtConfirmResponse.okCode}}</td>
                         <td>{{data.orderCtConfirmResponse.okMessage}}</td>
                         <td>{{data.orderCtConfirmResponse.okReference}}</td>
+                        <td>{{data.warehouses[0].shipments[0].empresa.toUpperCase()}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -399,6 +401,7 @@
                         <th>Total</th>
                         <th>Agente Email</th>
                         <th>Almacen Email</th>
+                        <th>Paqueteria</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -408,6 +411,7 @@
                         <td>{{data.orderCvaResponse.total}}</td>
                         <td>{{data.orderCvaResponse.agentemail}}</td>
                         <td>{{data.orderCvaResponse.almacenmail}}</td>
+                        <td>{{data.warehouses[0].shipments[0].empresa.toUpperCase()}}</td>
                       </tr>
                     </tbody>
                   </table>
