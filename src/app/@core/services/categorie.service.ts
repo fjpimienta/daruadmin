@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { ICatalog } from 'src/app/@core/interfaces/catalog.interface';
 import { ADD_CATEGORIE, ADD_CATEGORIE_LIST, BLOCK_CATEGORIE, UPDATE_CATEGORIE } from 'src/app/@graphql/operations/mutation/categorie';
-import { CATEGORIES_LIST_QUERY, CATEGORIE_ID_QUERY } from 'src/app/@graphql/operations/query/categories';
+import { CATEGORIES_LIST_QUERY, CATEGORIE_ID_QUERY, CATEGORYGROUPS_LIST_QUERY } from 'src/app/@graphql/operations/query/categories';
 import { ApiService } from 'src/app/@graphql/services/api.service';
 import { map } from 'rxjs/operators';
 import { ISupplier } from '@core/interfaces/supplier.interface';
@@ -69,6 +69,12 @@ export class CategoriesService extends ApiService {
       itemsPage, page, filterActiveValues
     }).pipe(map((result: any) => {
       return result.categories;
+    }));
+  }
+
+  getCategorysGroup() {
+    return this.get(CATEGORYGROUPS_LIST_QUERY, {}).pipe(map((result: any) => {
+      return result.categorysgroups;
     }));
   }
 
