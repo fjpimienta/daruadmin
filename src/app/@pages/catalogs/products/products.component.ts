@@ -224,11 +224,12 @@ export class ProductsComponent implements OnInit {
     productos.products.forEach(item => {
       const newItemExport = new ProductExportInterno();
       newItemExport.ID = item.id;
+      newItemExport.CON_DESCUENTO = item.featured;
       newItemExport.NOMBRE_DEL_PRODUCTO = item.name;
-      newItemExport.PRECIO_COMPRA = item.suppliersProd.sale_price > 0 ? item.suppliersProd.sale_price : item.suppliersProd.price;
-      newItemExport.PRECIO_VENTA = item.sale_price > 0 ? item.sale_price : item.price;
-      newItemExport.PRECIO_PROVEEDOR = item.suppliersProd.price;
-      newItemExport.PRECIO_DESCUENTO_PROVEEDOR = item.suppliersProd.sale_price;
+      newItemExport.PRECIO_VENTA = item.price;
+      newItemExport.PRECIO_VENTA_DESCUENTO = item.sale_price;
+      newItemExport.PRECIO_COMPRA = item.suppliersProd.price;
+      newItemExport.PRECIO_COMPRA_DESCUENTO = item.suppliersProd.sale_price;
       newItemExport.MARCA = item.brand;
       newItemExport.TIPO_DE_CAMBIO = item.exchangeRate;
       newItemExport.EXISTENCIA = item.stock;
