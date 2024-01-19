@@ -7,6 +7,7 @@ export class Catalog {
   slug?: string;
   order?: number;
   active?: boolean;
+  total?: number;
   suppliersCat?: SupplierCat[];
   pictures?: Picture[];
   email?: string;
