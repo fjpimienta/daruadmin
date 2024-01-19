@@ -169,11 +169,12 @@ export class AddProduct {
 
 export class ProductExportInterno {
   ID: number;
+  CON_DESCUENTO: boolean;
   NOMBRE_DEL_PRODUCTO: string;
-  PRECIO_COMPRA: number;
   PRECIO_VENTA: number;
-  PRECIO_PROVEEDOR: number;
-  PRECIO_DESCUENTO_PROVEEDOR: number;
+  PRECIO_VENTA_DESCUENTO: number;
+  PRECIO_COMPRA: number;
+  PRECIO_COMPRA_DESCUENTO: number;
   MARCA: string;
   TIPO_DE_CAMBIO: number;
   EXISTENCIA: number;
