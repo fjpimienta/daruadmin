@@ -258,7 +258,7 @@ export class ProductsComponent implements OnInit {
     if (event.tipo === 'item') {
       if (this.editMode) {                        // Si es un  para editar
         console.log('product/event.item: ', event.item);
-        // this.updateProduct(event.item);
+        this.updateProduct(event.item);
       } else {                                    // Si es un producto nuevo
         this.addProduct(event.item, event.files);
       }
