@@ -229,7 +229,7 @@ export class CaptureProdComponent implements OnInit {
     // this.catalog.id = this.captureForm.controls.clave.value;
 
     // Cargar Imagenes en Dropzone
-    // this.onInitDropzone();
+    this.onInitDropzone();
   }
 
   onOpenModal(product: Product, editMode: boolean = false, onlyView: boolean = false) {
