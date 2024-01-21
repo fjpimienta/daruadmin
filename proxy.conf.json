@@ -44,6 +44,10 @@
     "secure": true,
     "changeOrigin": true
   },
+  "/uploadFile": {
+    "target": "https://apidev.daru.mx:3001/uploadFile",
+    "secure": true
+  },
   "/graphql": {
     "target": "https://apidev.daru.mx:3001/graphql",
     "secure": true
