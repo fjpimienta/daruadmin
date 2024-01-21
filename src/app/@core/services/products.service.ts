@@ -131,7 +131,7 @@ export class ProductsService extends ApiService {
     const options = { headers };
     console.log('options: ', options);
     console.log('service.addImages/formData. ', formData);
-    return this.http.post('http://localhost:3000/uploadFile', formData, options)
+    return this.http.post('http://apidev.daru.mx:3001/uploadFile', formData, options)
       .subscribe({
         next: (response) => console.log('response: ', response),
         error: (error) => console.log('error: ', error)
