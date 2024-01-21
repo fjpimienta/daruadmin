@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ACTIVE_FILTERS } from '@core/constants/filters';
 import { Product } from '@core/models/product.models';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -131,7 +132,8 @@ export class ProductsService extends ApiService {
     const options = { headers };
     console.log('options: ', options);
     console.log('service.addImages/formData. ', formData);
-    return this.http.post('https://apidev.daru.mx:3001/uploadFile', formData, options)
+    const uri = environment.upload;
+    return this.http.post(uri, formData, options)
       .subscribe({
         next: (response) => console.log('response: ', response),
         error: (error) => console.log('error: ', error)
