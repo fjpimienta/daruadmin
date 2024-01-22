@@ -229,10 +229,12 @@ export class CaptureProdComponent implements OnInit {
     // this.catalog.id = this.captureForm.controls.clave.value;
 
     // Cargar Imagenes en Dropzone
-    this.onInitDropzone();
+    // this.onInitDropzone();
   }
 
   onOpenModal(product: Product, editMode: boolean = false, onlyView: boolean = false) {
+    this.files = [];
+    // TODO Cargar imagenes guardadas.
     this.product = product;
     this.editMode = editMode;
     this.onlyView = onlyView;
@@ -291,9 +293,7 @@ export class CaptureProdComponent implements OnInit {
   }
 
   onInitDropzone() {
-    console.log('onInitDropzone');
     this.files = [];
-    console.log('this.pictures: ', this.pictures);
     this.pictures.forEach(picture => {
       fetch(picture.url, {
         'mode': 'cors',
@@ -309,9 +309,7 @@ export class CaptureProdComponent implements OnInit {
           const splitName = fileName.split('.');
           const name = splitName[0];
           const file = new File([blob], name, { type: blob.type });
-          console.log('file', file);
           this.files.push(file);
-          console.log('this.files', this.files);
           this.readFile(blob);
         }).catch((error) => {
           console.log('Request failed', error);
