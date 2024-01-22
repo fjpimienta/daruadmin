@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ACTIVE_FILTERS } from '@core/constants/filters';
 import { Product } from '@core/models/product.models';
 import { environment } from 'src/environments/environment';
+import axios, { AxiosResponse } from 'axios';
 
 @Injectable({
   providedIn: 'root'
@@ -125,18 +126,16 @@ export class ProductsService extends ApiService {
     }));
   }
 
-  addImages(formData: FormData) {
-    const boundary = '---------------------------' + Date.now();
-    let headers = new HttpHeaders();
-    headers = headers.set('Content-Type', 'multipart/form-data; boundary=' + boundary);
-    const options = { headers };
-    console.log('options: ', options);
-    console.log('service.addImages/formData. ', formData);
-    const uri = environment.upload;
-    return this.http.post(uri, formData, options)
-      .subscribe({
-        next: (response) => console.log('response: ', response),
-        error: (error) => console.log('error: ', error)
-      });
+  addImages(formData: FormData): Promise<AxiosResponse> {
+    const url = environment.upload;
+      const config = {
+      method: 'post',
+      url,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      data: formData,
+    };
+      return axios.request(config);
   }
 }
