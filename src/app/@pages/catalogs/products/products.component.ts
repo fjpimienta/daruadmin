@@ -125,12 +125,10 @@ export class ProductsComponent implements OnInit {
         if (product.sale_price <= 0 || product.sale_price === undefined) {
           product.sale_price = 0;
         }
-        console.log('product: ', product);
         this.updateForm(product);
         break;
       case 'info':                                      // Mostrar información del elemento
         this.mostrarBoton = false;
-        console.log('product: ', product);
         this.updateForm(product, true, true);
         break;
       case 'import':
@@ -257,8 +255,6 @@ export class ProductsComponent implements OnInit {
   productBack(event) {
     if (event.tipo === 'item') {
       if (this.editMode) {                        // Si es un  para editar
-        console.log('product/event.item: ', event.item);
-        console.log('product/event.files: ', event.files);
         this.updateProduct(event.item, event.files);
       } else {                                    // Si es un producto nuevo
         this.addProduct(event.item, event.files);
@@ -272,14 +268,17 @@ export class ProductsComponent implements OnInit {
     this.productsService.add(product).subscribe(
       (res: any) => {
         if (res.status) {
-          // console.log('addProduct/files: ', files);
           const formData = new FormData();
           files.forEach(file => {
             formData.append('files', file, file.name);
-            // console.log('file: ', file);
           });
-          // console.log('addProduct/formData: ', formData);
-          const result = this.productsService.addImages(formData);
+          this.productsService.addImages(formData)
+            .then(result => {
+              console.log('result: ', result);
+            })
+            .catch(error => {
+              console.error('Error uploading images:', error);
+            });
           basicAlert(TYPE_ALERT.SUCCESS, res.message);
           setTimeout(() => {
             this.modal.onCloseModal();
@@ -321,13 +320,10 @@ export class ProductsComponent implements OnInit {
       this.productsService.update(product).subscribe(
         (res: any) => {
           if (res.status) {
-            console.log('addProduct/files: ', files);
             const formData = new FormData();
             files.forEach(file => {
               formData.append('files', file, file.name);
-              console.log('file: ', file);
             });
-            // console.log('updateProduct/formData: ', formData);
             this.productsService.addImages(formData)
               .then(result => {
                 console.log('result: ', result);
