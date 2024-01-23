@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { ORDERSCT_FRAGMENT, PRODUCTOSCT_FRAGMENT, PRODUCTSCT_FTP_FRAGMENT } from '@graphql/operations/fragment/suppliers/ct';
+import { ORDERSCT_FRAGMENT, PRODUCTOSCT_FRAGMENT, PRODUCTSCT_FTP_FRAGMENT, STATUS_ORDERCT_FRAGMENT } from '@graphql/operations/fragment/suppliers/ct';
 
 export const PRODUCTOSCT_LIST_QUERY = gql`
   query stockProductsCt {
@@ -51,4 +51,19 @@ export const ORDERSCT_LIST_QUERY = gql`
     }
   }
   ${ORDERSCT_FRAGMENT}
+`;
+
+export const STATUS_ORDER_CT = gql`
+  query statusOrdersCt(
+    $folio: String
+  ) {
+    statusOrdersCt(folio: $folio) {
+      status
+      message
+      statusOrdersCt {
+        ...StatusOrderCtObject
+      }
+    }
+  }
+  ${STATUS_ORDERCT_FRAGMENT}
 `;

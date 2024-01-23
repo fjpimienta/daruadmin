@@ -9,7 +9,7 @@ import { Apollo } from 'apollo-angular';
 import { ApiService } from '@graphql/services/api.service';
 import { BRANDSCVA_LIST_QUERY, GROUPSCVA_LIST_QUERY, PAQUETERIASCVA_LIST_QUERY, PRODUCTOSCVA_LIST_QUERY, PRODUCTSPRICECVA_LIST_QUERY, SOLUCIONESCVA_LIST_QUERY, SUCURSALESCVA_LIST_QUERY } from '@graphql/operations/query/suppliers/cva';
 import { Catalog } from '@core/models/catalog.models';
-import { PRODUCTOSCT_LIST_QUERY, PRODUCTSCT_JSON_QUERY, PRODUCTSCT_XML_QUERY } from '@graphql/operations/query/suppliers/ct';
+import { PRODUCTOSCT_LIST_QUERY, PRODUCTSCT_JSON_QUERY, PRODUCTSCT_XML_QUERY, STATUS_ORDER_CT } from '@graphql/operations/query/suppliers/ct';
 import { PRODUCTSINGRAM_LIST_QUERY, CATALOGSINGRAM_ONE_QUERY, CATALOGSINGRAM_LIST_QUERY } from '@graphql/operations/query/suppliers/ingram';
 
 declare const require;
@@ -629,6 +629,20 @@ export class ExternalAuthService extends ApiService {
       this.get(PRODUCTSCT_XML_QUERY, {}, {}).subscribe(
         (result: any) => {
           resolve(result.jsonProductsCtHP);
+        },
+        (error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  async statusOrdersCt(folio: string): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.get(STATUS_ORDER_CT, {
+        folio
+      }, {}).subscribe(
+        (result: any) => {
+          resolve(result.statusOrdersCt);
         },
         (error: any) => {
           reject(error);

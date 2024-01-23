@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Product } from '@core/models/product.models';
+import { ExternalAuthService } from '@core/services/external-auth.service';
 
 @Component({
   selector: 'app-table-pagination',
@@ -58,6 +59,7 @@ export class TablePaginationComponent implements OnInit {
     private httpClient: HttpClient,
     private service: TablePaginationService,
     private modalService: NgbModal,
+    private externalAuthService: ExternalAuthService
   ) {
     service.$emitter.subscribe(() => {
       this.loadData();
@@ -177,8 +179,26 @@ export class TablePaginationComponent implements OnInit {
     return await this.tiposPagosCt$.toPromise();
   }
 
+  async getStatusOrderCt(folio: string): Promise<any> {
+    const confirmarPedidoCt = await this.externalAuthService.statusOrdersCt(folio);
+    console.log('confirmarPedidoCt: ', confirmarPedidoCt);
+    return confirmarPedidoCt;
+  }
+
   openModal(content: any, data: any) {
     this.data = data;
+    // Si esta en ventas
+    console.log('this.data: ', this.data);
+    console.log('this.resultData: ', this.resultData);
+    if (this.resultData.listKey === 'deliverys') {
+      if (this.data.orderCtResponse) {
+        const response = this.getStatusOrderCt(this.data.orderCtResponse.pedidoWeb);
+        console.log('response: ', response);
+      }
+      if (this.data.orderCvaResponse) {
+
+      }
+    }
     this.productos = [];
     this.totalProd = 0.0;
     this.totalEnvios = 0;
