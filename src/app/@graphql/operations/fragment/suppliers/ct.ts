@@ -136,3 +136,10 @@ export const ORDERSCT_FRAGMENT = gql`
     }
   }
 `;
+
+export const STATUS_ORDERCT_FRAGMENT = gql`
+fragment StatusOrderCtObject on ResponseCtsStatus {
+  status
+  folio
+}
+`;
