@@ -193,7 +193,9 @@ export class TablePaginationComponent implements OnInit {
     // Si esta en ventas o Compras CT
     if (this.resultData.listKey === 'deliverys') {
       if (this.data.orderCtResponse) {
-        this.getStatusOrderCt(this.data.orderCtResponse.pedidoWeb);
+        this.getStatusOrderCt(this.data.orderCtResponse.pedidoWeb).then(result => {
+          this.guias = result.statusOrdersCt;
+        });
       }
       if (this.data.orderCvaResponse) {
       }
@@ -219,8 +221,6 @@ export class TablePaginationComponent implements OnInit {
       if (this.data.respuestaCT) {
         this.getStatusOrderCt(this.data.respuestaCT.pedidoWeb).then(result => {
           this.guias = result.statusOrdersCt;
-          console.log('this.data: ', this.data);
-          console.log('this.guias: ', this.guias);
           this.modalService.open(content, { size: 'lg', centered: true });
         });
       }
