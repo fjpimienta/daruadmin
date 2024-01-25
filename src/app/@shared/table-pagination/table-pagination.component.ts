@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Product } from '@core/models/product.models';
 import { ExternalAuthService } from '@core/services/external-auth.service';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-table-pagination',
@@ -49,6 +50,7 @@ export class TablePaginationComponent implements OnInit {
   tagFilter: string;
   private tiposPagos: any[] = [];
   data: any;
+  guias: any;
   productos: Product[];
   totalProd = 0.0;
   totalEnvios = 0;
@@ -59,7 +61,8 @@ export class TablePaginationComponent implements OnInit {
     private httpClient: HttpClient,
     private service: TablePaginationService,
     private modalService: NgbModal,
-    private externalAuthService: ExternalAuthService
+    private externalAuthService: ExternalAuthService,
+    private sanitizer: DomSanitizer
   ) {
     service.$emitter.subscribe(() => {
       this.loadData();
@@ -187,36 +190,51 @@ export class TablePaginationComponent implements OnInit {
 
   openModal(content: any, data: any) {
     this.data = data;
-    // Si esta en ventas
-    console.log('this.data: ', this.data);
-    console.log('this.resultData: ', this.resultData);
+    // Si esta en ventas o Compras CT
     if (this.resultData.listKey === 'deliverys') {
       if (this.data.orderCtResponse) {
-        const response = this.getStatusOrderCt(this.data.orderCtResponse.pedidoWeb);
-        console.log('response: ', response);
+        this.getStatusOrderCt(this.data.orderCtResponse.pedidoWeb);
       }
       if (this.data.orderCvaResponse) {
-
+      }
+      this.productos = [];
+      this.totalProd = 0.0;
+      this.totalEnvios = 0;
+      for (const idW of Object.keys(this.data.warehouses)) {
+        const warehouse = this.data.warehouses[idW];
+        for (const idP of Object.keys(warehouse.productShipments)) {
+          const prod = warehouse.productShipments[idP];
+          this.totalProd += (prod.precio * prod.cantidad);
+          this.productos.push(prod);
+        }
+        for (const idE of Object.keys(warehouse.shipments)) {
+          const ship = warehouse.shipments[idE];
+          this.totalEnvios += ship.costo;
+        }
+      }
+      this.discount = this.data.discount;
+      this.total = this.totalProd + this.totalEnvios - this.discount;
+      this.modalService.open(content, { size: 'lg', centered: true });
+    } else if (this.resultData.listKey === 'listOrdersCt') {
+      if (this.data.respuestaCT) {
+        this.getStatusOrderCt(this.data.respuestaCT.pedidoWeb).then(result => {
+          this.guias = result.statusOrdersCt;
+          console.log('this.data: ', this.data);
+          console.log('this.guias: ', this.guias);
+          this.modalService.open(content, { size: 'lg', centered: true });
+        });
       }
     }
-    this.productos = [];
-    this.totalProd = 0.0;
-    this.totalEnvios = 0;
-    for (const idW of Object.keys(this.data.warehouses)) {
-      const warehouse = this.data.warehouses[idW];
-      for (const idP of Object.keys(warehouse.productShipments)) {
-        const prod = warehouse.productShipments[idP];
-        this.totalProd += (prod.precio * prod.cantidad);
-        this.productos.push(prod);
-      }
-      for (const idE of Object.keys(warehouse.shipments)) {
-        const ship = warehouse.shipments[idE];
-        this.totalEnvios += ship.costo;
-      }
-    }
-    this.discount = this.data.discount;
-    this.total = this.totalProd + this.totalEnvios - this.discount;
-
-    this.modalService.open(content, { size: 'lg', centered: true });
   }
+
+  getArchivoSeguro(archivoBase64: string): SafeResourceUrl {
+    const url = `data:application/pdf;base64,${archivoBase64}`;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+
+  abrirPDFEnOtraPagina(archivo: string): void {
+    const nuevaVentana = window.open();
+    nuevaVentana.document.write(`<embed src="data:application/pdf;base64,${archivo}" type="application/pdf" width="100%" height="100%">`);
+  }
+
 }
