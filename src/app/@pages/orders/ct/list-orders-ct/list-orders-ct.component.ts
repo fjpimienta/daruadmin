@@ -72,6 +72,11 @@ export class ListOrdersCtComponent implements OnInit {
         property: 'respuestaCT.estatus',
         label: 'Estatus',
         class: 'clave'
+      },
+      {
+        property: '',
+        label: 'Compra',
+        class: 'id'
       }
     ]
   }
