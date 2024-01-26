@@ -37,10 +37,11 @@ export const BLOCK_USER = gql`
 `;
 
 export const ACTIVE_EMAIL_USER = gql`
-   mutation activeUserEmail($id: ID!, $email: String!) {
+   mutation activeUserEmail($id: ID!, $email: String!, $admin: Boolean) {
       activeUserEmail(
          id: $id,
-         email: $email
+         email: $email,
+         admin: $admin
       )  {
             status
             message

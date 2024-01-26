@@ -75,11 +75,12 @@ export class UsersService extends ApiService {
       );
   }
 
-  sendEmailActive(id: string, email: string) {
+  sendEmailActive(id: string, email: string, admin: boolean) {
     return this.set(
       ACTIVE_EMAIL_USER, {
       id,
-      email
+      email,
+      admin
     }).pipe(map((result: any) => {
       return result.activeUserEmail;
     }));
