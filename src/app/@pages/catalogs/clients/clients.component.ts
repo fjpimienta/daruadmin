@@ -129,7 +129,7 @@ export class ClientsComponent implements OnInit {
       (res: any) => {
         if (res.status) {
           basicAlert(TYPE_ALERT.SUCCESS, res.message);
-          this.usersService.sendEmailActive(res.user.id, user.email).subscribe(
+          this.usersService.sendEmailActive(res.user.id, user.email, true).subscribe(
             resEmail => {
               (resEmail.status) ?
                 basicAlert(TYPE_ALERT.SUCCESS, resEmail.message) :
