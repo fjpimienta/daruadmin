@@ -117,6 +117,7 @@ export interface ISupplierProd {
 
 export interface IBranchOffices {
   id: string;
+  key: string;
   name: string;
   estado: string;
   cantidad: number;

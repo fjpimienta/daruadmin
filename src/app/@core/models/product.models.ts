@@ -124,6 +124,7 @@ export class SupplierProd {
 
 export class BranchOffices {
   id: string;
+  key: string;
   name: string;
   estado: string;
   cantidad: number;

@@ -51,6 +51,7 @@ export const DELIVERY_FRAGMENT = gql`
           moneda
           branchOffices {
             id
+            key
             name
             estado
             cantidad
@@ -157,6 +158,7 @@ export const DELIVERY_FRAGMENT = gql`
             moneda
             branchOffices {
               id
+              key
               name
               estado
               cantidad

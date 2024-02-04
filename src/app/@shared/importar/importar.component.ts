@@ -784,6 +784,7 @@ export class ImportarComponent implements OnInit {
     const almacen = new BranchOffices();
     const almacenEstado = this.getCtAlmacenes(branch.almacen.key);
     almacen.id = almacenEstado.id.toString();
+    almacen.key = branch.almacen.key;
     almacen.name = almacenEstado.Sucursal;
     almacen.estado = almacenEstado.Estado;
     almacen.cp = almacenEstado.CP;
@@ -819,6 +820,7 @@ export class ImportarComponent implements OnInit {
       let cantidad = 0;
       const branchOffice = new BranchOffices();
       branchOffice.id = almacen.clave;
+      branchOffice.key = almacen.key;
       branchOffice.name = almacen.nombre;
       branchOffice.estado = almacen.nombre;
       branchOffice.cp = almacen.cp;
