@@ -1243,7 +1243,7 @@ export class ImportarComponent implements OnInit {
             itemData.brands.push(b);
             // SupplierProd
             s.idProveedor = proveedor;
-            s.codigo = item.clave;
+            s.codigo = item.codigo_fabricante;
             s.price = item.precio;
             s.sale_price = item.PrecioDescuento === '' ? 0 : parseFloat(item.PrecioDescuento);
             s.moneda = item.moneda === 'Pesos' ? 'MXN' : 'USD';
@@ -1372,7 +1372,7 @@ export class ImportarComponent implements OnInit {
             itemData.brands.push(b);
             // SupplierProd
             s.idProveedor = proveedor;
-            s.codigo = productJson.numParte;
+            s.codigo = productJson.clave;
             if (itemData.promociones && (
               itemData.promociones.disponible_en_promocion > 0 || itemData.promociones.porciento > 0)) {
               const precioPromocion = (parseFloat(item.precio) - (parseFloat(item.precio) * itemData.promociones.porciento / 100)).toFixed(2);
