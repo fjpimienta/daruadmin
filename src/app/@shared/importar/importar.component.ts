@@ -1370,7 +1370,7 @@ export class ImportarComponent implements OnInit {
             b.name = productJson.marca;
             b.slug = slugify(productJson.marca, { lower: true });
             itemData.brands.push(b);
-            // SupplierProd                                                         TO-DO
+            // SupplierProd
             s.idProveedor = proveedor;
             s.codigo = productJson.numParte;
             if (itemData.promociones && (
