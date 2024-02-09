@@ -1370,9 +1370,9 @@ export class ImportarComponent implements OnInit {
             b.name = productJson.marca;
             b.slug = slugify(productJson.marca, { lower: true });
             itemData.brands.push(b);
-            // SupplierProd                                                         TO-DO
+            // SupplierProd
             s.idProveedor = proveedor;
-            s.codigo = productJson.clave;
+            s.codigo = productJson.numParte;
             if (itemData.promociones && (
               itemData.promociones.disponible_en_promocion > 0 || itemData.promociones.porciento > 0)) {
               const precioPromocion = (parseFloat(item.precio) - (parseFloat(item.precio) * itemData.promociones.porciento / 100)).toFixed(2);
