@@ -5,9 +5,19 @@ export const DELIVERY_FRAGMENT = gql`
       id
       deliveryId
       cliente
-      importe
+      cupon {
+        id
+        cupon
+        description
+        typeDiscount
+        amountDiscount
+        minimumPurchase
+        active
+      }
       discount
+      importe
       registerDate
+      lastUpdate
       user {
         id
         name
@@ -36,6 +46,77 @@ export const DELIVERY_FRAGMENT = gql`
           interiorNumber
         }
       }
+      chargeOpenpay {
+        id
+        authorization
+        transaction_type
+        operation_type
+        method
+        creation_date
+        operation_date
+        order_id
+        status
+        amount
+        description
+        error_message
+        customer_id
+        currency
+        bank_account {
+          clabe
+          holder_name
+          alias
+          bank_name
+        }
+        card {
+          id
+          type
+          card_number
+          holder_name
+          expiration_year
+          expiration_month
+          allows_charges
+          allows_payouts
+          creation_date
+          bank_name
+          customer_id
+          bank_code
+        }
+        payment_method {
+          type
+          url
+          agreement
+          bank
+          clabe
+          name
+        }
+        conciliated
+        customer {
+          id
+          creation_date
+          name
+          last_name
+          email
+          phone_number
+          bank_name
+          external_id
+          status
+          balance
+          address {
+            line1
+            line2
+            line3
+            postal_code
+            state
+            city
+            country_code
+          }
+          store {
+            reference
+            barcode_url
+          }
+          clabe
+        }
+      }
       warehouses {
         id
         cp
@@ -47,6 +128,7 @@ export const DELIVERY_FRAGMENT = gql`
           idProveedor
           codigo
           price
+          cantidad
           sale_price
           moneda
           branchOffices {
@@ -67,7 +149,6 @@ export const DELIVERY_FRAGMENT = gql`
           slug
           price
           sale_price
-          exchangeRate
           review
           ratings
           until
@@ -80,14 +161,6 @@ export const DELIVERY_FRAGMENT = gql`
           sku
           upc
           category {
-            name
-            slug
-            pivot {
-              product_id
-              product_category_id
-            }
-          }
-          subCategory {
             name
             slug
             pivot {
@@ -153,6 +226,7 @@ export const DELIVERY_FRAGMENT = gql`
             idProveedor
             codigo
             price
+            cantidad
             sale_price
             moneda
             branchOffices {
@@ -176,11 +250,6 @@ export const DELIVERY_FRAGMENT = gql`
             inicio_promocion
             vencimiento_promocion
             disponible_en_promocion
-            porciento
-          }
-          especificaciones {
-            tipo
-            valor
           }
         }
         productShipments {
@@ -229,7 +298,7 @@ export const DELIVERY_FRAGMENT = gql`
           moneda
         }
         cfdi
-        respuestaCT {
+        orderCtResponse {
           pedidoWeb
           fecha
           tipoDeCambio
@@ -239,6 +308,11 @@ export const DELIVERY_FRAGMENT = gql`
             errorMessage
             errorReference
           }
+        }
+        orderCtConfirmResponse {
+          okCode
+          okMessage
+          okReference
         }
       }
       ordersCva {
@@ -260,32 +334,17 @@ export const DELIVERY_FRAGMENT = gql`
         Estado
         Ciudad
         Atencion
-      }
-      orderCtResponse {
-        pedidoWeb
-        fecha
-        tipoDeCambio
-        estatus
-        errores {
-          errorCode
-          errorMessage
-          errorReference
+        orderCvaResponse {
+          error
+          estado
+          pedido
+          total
+          agentemail
+          almacenmail
         }
       }
-      orderCtConfirmResponse {
-        okCode
-        okMessage
-        okReference
-      }
-      orderCvaResponse {
-        error
-        estado
-        pedido
-        total
-        agentemail
-        almacenmail
-      }
       invoiceConfig {
+        factura
         nombres
         apellidos
         nombreEmpresa
@@ -302,13 +361,19 @@ export const DELIVERY_FRAGMENT = gql`
         regimenFiscal {
           id
           descripcion
+          fisica
+          moral
         }
         usoCFDI {
           id
           descripcion
+          aplicaParaTipoPersonaFisica
+          aplicaParaTipoPersonaMoral
         }
       }
       statusError
       messageError
+      status
+      lastUpdate
     }
 `;
