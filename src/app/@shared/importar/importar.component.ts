@@ -1144,7 +1144,7 @@ export class ImportarComponent implements OnInit {
               // SupplierProd                 TO-DO
               s.idProveedor = proveedor;
               s.codigo = item.vendorPartNumber;
-              s.cantidad = 0;
+              s.cantidad = this.stockMinimo;
               // TO-DO Promociones
               s.moneda = item.pricing.currencyCode;
               s.branchOffices = branchOfficesIngram;
@@ -1246,7 +1246,7 @@ export class ImportarComponent implements OnInit {
             s.idProveedor = proveedor;
             s.codigo = item.codigo_fabricante;
             s.price = item.precio;
-            s.cantidad = 0;
+            s.cantidad = this.stockMinimo;
             s.sale_price = item.PrecioDescuento === '' ? 0 : parseFloat(item.PrecioDescuento);
             s.moneda = item.moneda === 'Pesos' ? 'MXN' : 'USD';
             s.branchOffices = branchOffices;
@@ -1375,7 +1375,7 @@ export class ImportarComponent implements OnInit {
             // SupplierProd
             s.idProveedor = proveedor;
             s.codigo = productJson.clave;
-            s.cantidad = 0;
+            s.cantidad = this.stockMinimo;
             if (itemData.promociones && (
               itemData.promociones.disponible_en_promocion > 0 || itemData.promociones.porciento > 0)) {
               const precioPromocion = (parseFloat(item.precio) - (parseFloat(item.precio) * itemData.promociones.porciento / 100)).toFixed(2);
