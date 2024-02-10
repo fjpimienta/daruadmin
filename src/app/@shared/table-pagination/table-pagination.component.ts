@@ -174,8 +174,11 @@ export class TablePaginationComponent implements OnInit {
   }
 
   getTipoPagoName(tipoPagoId: string): string | undefined {
-    const tipoPago = this.tiposPagos.find(tipo => tipo.id === tipoPagoId.toString());
-    return tipoPago.tipo_pago ? tipoPago.tipo_pago : 'NA';
+    if (this.tiposPagos) {
+      const tipoPago = this.tiposPagos.find(tipo => tipo.id === tipoPagoId.toString());
+      return tipoPago.tipo_pago ? tipoPago.tipo_pago : 'NA';
+    }
+    return 'NA';
   }
 
   async getTiposPagosCt(): Promise<any> {
