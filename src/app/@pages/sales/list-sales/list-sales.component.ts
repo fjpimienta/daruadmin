@@ -75,6 +75,11 @@ export class ListSalesComponent implements OnInit {
         class: 'fecha'
       },
       {
+        property: 'status',
+        label: 'Estatus',
+        class: 'clave'
+      },
+      {
         property: 'venta',
         label: 'Venta',
         class: 'id'
