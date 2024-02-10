@@ -51,7 +51,7 @@
             <!-- <div class="col-sm-12 col-md-1">
             </div> -->
             <div class="col-xs-12 col-sm-6 col-md-3 d-flex flex-row justify-content-end">
-              <button type="submit" class="btn btn-light mb-2" (click)="loadData()"><i
+              <button type="submit" class="btn btn-light mb-2" title="loadData" (click)="loadData()"><i
                   class="fas fa-search"></i></button>
               <button *ngIf="mostrarImport" type="button" class="btn btn-light mb-2" title="Importar"
                 (click)="manageAction('import', null)"><i class="fas fa-bars"></i></button>
@@ -93,12 +93,12 @@
                             {{data.creation_date | date:'dd/MM/yyyy'}}
                           </span>
                           <span *ngIf="val.class == 'id' && val.property=='venta'">
-                            <button type="button" class="btn btn-primary" (click)="openModal(content, data)"><i
-                                class="fas fa-info-circle"></i></button>
+                            <button type="button" class="btn btn-primary" title="openModal"
+                              (click)="openModal(content, data)"><i class="fas fa-info-circle"></i></button>
                           </span>
                           <span *ngIf="val.class == 'id' && val.property==''">
-                            <button type="button" class="btn btn-primary" (click)="openModal(contentCT, data)"><i
-                                class="fas fa-info-circle"></i></button>
+                            <button type="button" class="btn btn-primary" title="openModal"
+                              (click)="openModal(contentCT, data)"><i class="fas fa-info-circle"></i></button>
                           </span>
                           <span *ngIf="val.class != 'fecha'">
                             <span *ngIf="val.class != 'numero'">
@@ -153,14 +153,15 @@
                     </ng-template>
                   </td>
                   <th *ngIf="mostrarActivos" scope="col" class="centrado">
-                    <button type="button" class="btn btn-sm btn-secondary m-1" (click)="manageAction('edit', data)"><i
-                        class="fas fa-edit"></i></button>
-                    <button *ngIf="mostrarBoton" type="button" class="btn btn-sm btn-info m-1"
+                    <button type="button" class="btn btn-sm btn-secondary m-1" title="manageAction"
+                      (click)="manageAction('edit', data)"><i class="fas fa-edit"></i></button>
+                    <button *ngIf="mostrarBoton" type="button" class="btn btn-sm btn-info m-1" title="manageAction"
                       (click)="manageAction('info', data)"><i class="fas fa-info-circle"></i></button>
                     <button *ngIf="data.active == true && mostrarBoton" type="button" class="btn btn-sm btn-danger m-1"
-                      (click)="manageAction('block', data)"><i class="fas fa-lock"></i></button>
+                      title="manageAction" (click)="manageAction('block', data)"><i class="fas fa-lock"></i></button>
                     <button *ngIf="data.active != true && mostrarBoton" type="button" class="btn btn-sm btn-danger m-1"
-                      (click)="manageAction('unblock', data)"><i class="fas fa-lock-open"></i></button>
+                      title="manageAction" (click)="manageAction('unblock', data)"><i
+                        class="fas fa-lock-open"></i></button>
                   </th>
                 </tr>
               </tbody>
@@ -234,7 +235,7 @@
                   <tr>
                     <td colspan="2">&nbsp;</td>
                     <td><strong>Costo Envio:</strong></td>
-                    <td class="text-right">$ {{totalEnvios}}</td>
+                    <td class="text-right">$ {{totalEnvios.toFixed(2).toString()}}</td>
                   </tr>
                   <tr *ngIf="discount > 0">
                     <td colspan="2">&nbsp;</td>
