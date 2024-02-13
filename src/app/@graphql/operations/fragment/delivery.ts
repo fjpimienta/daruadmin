@@ -291,7 +291,7 @@ export const DELIVERY_FRAGMENT = gql`
           codigoPostal
           telefono
         }
-        productoCt {
+        producto {
           cantidad
           clave
           precio
