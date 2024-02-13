@@ -613,7 +613,7 @@ export class ImportarComponent implements OnInit {
           if (productosCva.length > 0) {
             let i = 1;
             for (const product of productosCva) {
-              if (!product.name.toLowerCase().includes('cubre bocas')) {
+              if (product.name && !product.name.toLowerCase().includes('cubre bocas')) {
                 let itemData = new Product();
                 product.id = i;
                 itemData = await this.setProduct(supplier.slug, product);
