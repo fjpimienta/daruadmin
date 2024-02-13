@@ -1,5 +1,6 @@
 export class IProductCva {
   clave: string;
+  upc: string;
   codigo_fabricante: string;
   descripcion: string;
   solucion: string;
@@ -55,4 +56,6 @@ export class IProductCva {
   VENTAS_VERACRUZ: number;
   VENTAS_ZACATECAS: number;
   ExsTotal: number;
+  dimensiones: string;
+  peso: string;
 }
