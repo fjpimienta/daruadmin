@@ -117,7 +117,7 @@ export const ORDERSCT_FRAGMENT = gql`
       generarGuia
       paqueteria
     }
-    productoCt {
+    producto {
       cantidad
       clave
       precio
@@ -146,6 +146,12 @@ fragment StatusOrderCtObject on ResponseCtsStatus {
     paqueteria
     direccion
     archivo
+  }
+  producto {
+    cantidad
+    clave
+    precio
+    moneda
   }
 }
 `;

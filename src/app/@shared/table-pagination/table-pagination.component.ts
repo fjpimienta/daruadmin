@@ -195,6 +195,7 @@ export class TablePaginationComponent implements OnInit {
     this.data = data;
     // Si esta en ventas o Compras CT
     if (this.resultData.listKey === 'deliverys') {
+      console.log('data: ', data);
       if (this.data.orderCtResponse) {
         this.getStatusOrderCt(this.data.orderCtResponse.pedidoWeb).then(result => {
           this.guias = result.statusOrdersCt;
