@@ -38,6 +38,7 @@ export const PAQUETERIASCVA_FRAGMENT = gql`
 export const PRODUCTOSCVA_FRAGMENT = gql`
   fragment ProductosCvaObject on ResponseProductCva {
     clave
+    upc
     codigo_fabricante
     descripcion
     solucion
@@ -93,6 +94,8 @@ export const PRODUCTOSCVA_FRAGMENT = gql`
     VENTAS_VERACRUZ
     VENTAS_ZACATECAS
     ExsTotal
+    dimensiones
+    peso
   }
 `;
 
