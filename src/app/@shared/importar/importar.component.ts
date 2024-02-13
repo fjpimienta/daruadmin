@@ -1212,10 +1212,10 @@ export class ImportarComponent implements OnInit {
             itemData.unidadDeMedida = unidad;
             // Categorias
             itemData.category = [];
-            if (item.grupo) {
+            if (item.solucion) {
               const c = new Categorys();
-              c.name = item.grupo;
-              c.slug = slugify(item.grupo, { lower: true });
+              c.name = item.solucion;
+              c.slug = slugify(item.solucion, { lower: true });
               itemData.category.push(c);
             } else {
               const c = new Categorys();
@@ -1225,10 +1225,10 @@ export class ImportarComponent implements OnInit {
             }
             // SubCategorias
             itemData.subCategory = [];
-            if (item.subgrupo) {
+            if (item.grupo) {
               const c1 = new Categorys();
-              c1.name = item.subgrupo;
-              c1.slug = slugify(item.subgrupo, { lower: true });
+              c1.name = item.grupo;
+              c1.slug = slugify(item.grupo, { lower: true });
               itemData.subCategory.push(c1);
             } else {
               const c1 = new Categorys();
