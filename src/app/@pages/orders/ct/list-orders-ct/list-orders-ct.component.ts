@@ -54,11 +54,6 @@ export class ListOrdersCtComponent implements OnInit {
         class: 'clave'
       },
       {
-        property: 'tipoPago',
-        label: 'Tipo de Pago',
-        class: 'clave'
-      },
-      {
         property: 'respuestaCT.pedidoWeb',
         label: 'Pedido CT',
         class: 'clave'
@@ -71,6 +66,11 @@ export class ListOrdersCtComponent implements OnInit {
       {
         property: 'respuestaCT.estatus',
         label: 'Estatus',
+        class: 'clave'
+      },
+      {
+        property: 'tipoPago',
+        label: 'Tipo de Pago',
         class: 'clave'
       },
       {
