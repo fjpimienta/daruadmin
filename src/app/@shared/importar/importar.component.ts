@@ -1274,6 +1274,19 @@ export class ImportarComponent implements OnInit {
             is.url = item.imagen;
             itemData.variants = [];
             itemData.sm_pictures.push(is);
+            itemData.especificaciones = [];
+            if (item.dimensiones) {
+              const especD: Especificacion = new Especificacion();
+              especD.tipo = 'Dimesiones';
+              especD.valor = item.dimensiones;
+              itemData.especificaciones.push(especD);
+            }
+            if (item.peso) {
+              const especP: Especificacion = new Especificacion();
+              especP.tipo = 'Peso';
+              especP.valor = item.peso;
+              itemData.especificaciones.push(especP);
+            }
           }
         }
         return itemData;
