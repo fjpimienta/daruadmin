@@ -1277,7 +1277,7 @@ export class ImportarComponent implements OnInit {
             itemData.especificaciones = [];
             if (item.dimensiones) {
               const especD: Especificacion = new Especificacion();
-              especD.tipo = 'Dimesiones';
+              especD.tipo = 'Dimensiones';
               especD.valor = item.dimensiones;
               itemData.especificaciones.push(especD);
             }
