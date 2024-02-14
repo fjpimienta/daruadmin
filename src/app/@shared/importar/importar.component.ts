@@ -601,27 +601,23 @@ export class ImportarComponent implements OnInit {
           ];
           // Obtener la lista de grupos excluyendo los especificados
           const filteredGroups = excludeGroups(groupsToExclude, groupsCva.listGroupsCva);
-
           for (const group of filteredGroups) {
             const productosCvaTmp = await this.externalAuthService.getProductsPricesCva(group.grupo);
             if (productosCvaTmp && productosCvaTmp.listPricesCva !== null && productosCvaTmp.listPricesCva.length > 0) {
               productosCva.push(...productosCvaTmp.listPricesCva);
             }
           }
-
           this.cvaAlmacenes = almacenes.listSucursalesCva;
           if (productosCva.length > 0) {
             let i = 1;
             for (const product of productosCva) {
-              if (product.name && !product.name.toLowerCase().includes('cubre bocas')) {
-                let itemData = new Product();
-                product.id = i;
-                itemData = await this.setProduct(supplier.slug, product);
-                if (itemData.id !== undefined) {
-                  productos.push(itemData);
-                }
-                i += 1;
+              let itemData = new Product();
+              product.id = i;
+              itemData = await this.setProduct(supplier.slug, product);
+              if (itemData.id !== undefined) {
+                productos.push(itemData);
               }
+              i += 1;
             }
           } else {
             return await [];
