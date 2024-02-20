@@ -84,20 +84,20 @@
                           </span> -->
                           <span *ngIf="val.class == 'numero'">{{ formatoMoneda(data[val.property], true) }}</span>
                           <span *ngIf="val.class == 'fecha' && val.property=='registerDate'">
-                            {{data.registerDate | date:'dd/MM/yyyy'}}
+                            {{data.registerDate | date: 'dd/MM/yyyy HH:mm:ss'}}
                           </span>
                           <span *ngIf="val.class == 'fecha' && val.property=='respuestaCT.fecha'">
-                            {{data.respuestaCT.fecha | date:'dd/MM/yyyy'}}
+                            {{data.respuestaCT.fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
                           </span>
                           <span *ngIf="val.class == 'fecha' && val.property=='creation_date'">
-                            {{data.creation_date | date:'dd/MM/yyyy'}}
+                            {{data.creation_date | date: 'dd/MM/yyyy HH:mm:ss'}}
                           </span>
                           <span *ngIf="val.class == 'id' && val.property=='venta'">
-                            <button type="button" class="btn btn-primary" title="openModal"
+                            <button type="button" class="btn btn-primary" title="Ver Detalle"
                               (click)="openModal(content, data)"><i class="fas fa-info-circle"></i></button>
                           </span>
                           <span *ngIf="val.class == 'id' && val.property==''">
-                            <button type="button" class="btn btn-primary" title="openModal"
+                            <button type="button" class="btn btn-primary" title="Ver Detalle"
                               (click)="openModal(contentCT, data)"><i class="fas fa-info-circle"></i></button>
                           </span>
                           <span *ngIf="val.class != 'fecha'">
@@ -354,7 +354,7 @@
               </div>
             </ng-template>
           </li>
-          <li *ngIf="data.orderCtResponse" [ngbNavItem]="5">
+          <li *ngIf="data.ordersCt && data.ordersCt.length >0" [ngbNavItem]="5">
             <a ngbNavLink>
               <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
               <span class="d-none d-sm-block">CT</span>
@@ -368,20 +368,20 @@
                       <tr>
                         <th>Pedido</th>
                         <th>Fecha</th>
-                        <th>Codigo</th>
+                        <th>Estatus</th>
                         <th>Mensaje</th>
                         <th>Referencia</th>
                         <th>Paqueteria</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>{{data.orderCtResponse.pedidoWeb}}</td>
-                        <td>{{data.orderCtResponse.fecha}}</td>
-                        <td>{{data.orderCtConfirmResponse.okCode}}</td>
-                        <td>{{data.orderCtConfirmResponse.okMessage}}</td>
-                        <td>{{data.orderCtConfirmResponse.okReference}}</td>
-                        <td>{{data.warehouses[0].shipments[0].empresa.toUpperCase()}}</td>
+                      <tr *ngFor="let order of data.ordersCt">
+                        <td>{{order.orderCtResponse.pedidoWeb}}</td>
+                        <td>{{order.orderCtResponse.fecha | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                        <td>{{order.orderCtResponse.status}}</td>
+                        <td>{{order.orderCtConfirmResponse && order.orderCtConfirmResponse.length >0 ? order.orderCtConfirmResponse.okMessage : ''}}</td>
+                        <td>{{order.orderCtConfirmResponse && order.orderCtConfirmResponse.length >0 ? order.orderCtConfirmResponse.okReference : ''}}</td>
+                        <td>order.warehouses[0].shipments[0].empresa.toUpperCase()</td>
                       </tr>
                     </tbody>
                   </table>
@@ -414,7 +414,7 @@
               </div>
             </ng-template>
           </li>
-          <li *ngIf="data.orderCvaResponse" [ngbNavItem]="6">
+          <li *ngIf="data.ordersCva && data.ordersCva.length >0" [ngbNavItem]="6">
             <a ngbNavLink>
               <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
               <span class="d-none d-sm-block">CVA</span>

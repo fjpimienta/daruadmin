@@ -1034,7 +1034,7 @@ export class ImportarComponent implements OnInit {
           }
           break;
         case '46':
-          cantidad = parseInt(item.VENTAS_CEDISGUADALAJARA, 10);
+          cantidad = parseInt(item.disponibleCD, 10);
           if (cantidad >= this.stockMinimo) {
             branchOffice.cantidad = cantidad;
             branchOffices.push(branchOffice);
