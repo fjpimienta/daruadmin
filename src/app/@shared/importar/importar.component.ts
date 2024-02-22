@@ -1094,7 +1094,7 @@ export class ImportarComponent implements OnInit {
               const almacen = this.getAlmacenIngram(element);
               if (almacen.cantidad >= this.stockMinimo) {
                 console.log('availabilityByWarehouse.almacen.cantidad: ', almacen.cantidad);
-                disponible = almacen.cantidad;
+                disponible += almacen.cantidad;
                 branchOfficesIngram.push(almacen);
               }
             }
@@ -1168,7 +1168,7 @@ export class ImportarComponent implements OnInit {
           let featured = false;
           branchOffices = this.setCvaAlmacenes(item);
           if (branchOffices.length > 0) {
-            disponibilidadAlmacenes = branchOffices[0].cantidad;
+            disponibilidadAlmacenes += branchOffices[0].cantidad > 0 ? branchOffices[0].cantidad : 0;
             itemData.id = item.id;
             itemData.name = item.descripcion;
             itemData.slug = slugify(item.descripcion, { lower: true });
@@ -1300,7 +1300,7 @@ export class ImportarComponent implements OnInit {
           for (const element of item.almacenes) {
             const almacen = this.getAlmacenCant(element);
             if (almacen.cantidad >= this.stockMinimo) {
-              disponible = almacen.cantidad;
+              disponible += almacen.cantidad;
               branchOfficesCt.push(almacen);
             }
           }
