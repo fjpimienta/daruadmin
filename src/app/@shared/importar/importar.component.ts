@@ -822,6 +822,7 @@ export class ImportarComponent implements OnInit {
       branchOffice.cp = almacen.cp;
       branchOffice.latitud = '';
       branchOffice.longitud = '';
+      branchOffice.cantidad = cantidad;
       switch (almacen.clave) {
         case '1':
           cantidad = parseInt(item.VENTAS_GUADALAJARA, 10);
@@ -1168,7 +1169,7 @@ export class ImportarComponent implements OnInit {
           let featured = false;
           branchOffices = this.setCvaAlmacenes(item);
           if (branchOffices.length > 0) {
-            disponibilidadAlmacenes += branchOffices[0].cantidad > 0 ? branchOffices[0].cantidad : 0;
+            disponibilidadAlmacenes += branchOffices[0].cantidad;
             itemData.id = item.id;
             itemData.name = item.descripcion;
             itemData.slug = slugify(item.descripcion, { lower: true });
