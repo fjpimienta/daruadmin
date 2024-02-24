@@ -629,7 +629,6 @@ export class ImportarComponent implements OnInit {
       case 'ct':
         this.ctAlmacenes = await this.getAlmacenes();
         const productosCt = await this.externalAuthService.getProductsCt();
-        console.log('productosCt: ', productosCt);
         if (productosCt.status) {
           let productsCtFtp: any[] = [];
           const productosCtJson = await this.externalAuthService.getProductsCtJson();
@@ -814,8 +813,8 @@ export class ImportarComponent implements OnInit {
   setCvaAlmacenes(item: any): BranchOffices[] {
     const branchOffices: BranchOffices[] = [];
     if (this.cvaAlmacenes.length > 0) {
-      let cantidad = 0;
       this.cvaAlmacenes.forEach(almacen => {
+        let cantidad = 0;
         const branchOffice = new BranchOffices();
         branchOffice.id = almacen.clave;
         branchOffice.name = almacen.nombre;
