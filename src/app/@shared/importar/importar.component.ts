@@ -1163,13 +1163,15 @@ export class ImportarComponent implements OnInit {
 
       case 'cva':
         salePrice = 0;
+        disponible = 0;
         let branchOffices: BranchOffices[] = [];
-        let disponibilidadAlmacenes = 0;
         if (item.ExsTotal >= this.stockMinimo) {                  // Si existencias totales.
           let featured = false;
           branchOffices = this.setCvaAlmacenes(item);
+          for (const branchOffice of branchOffices) {
+            disponible += branchOffice.cantidad;
+          }
           if (branchOffices.length > 0) {
-            disponibilidadAlmacenes += branchOffices[0].cantidad;
             itemData.id = item.id;
             itemData.name = item.descripcion;
             itemData.slug = slugify(item.descripcion, { lower: true });
@@ -1200,7 +1202,6 @@ export class ImportarComponent implements OnInit {
             itemData.promociones = promo;
             itemData.new = false;
             itemData.sold = null;
-            disponible = disponibilidadAlmacenes;
             itemData.stock = disponible;
             itemData.sku = item.clave;
             itemData.partnumber = item.codigo_fabricante;
