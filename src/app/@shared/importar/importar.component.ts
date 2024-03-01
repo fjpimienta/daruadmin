@@ -439,11 +439,11 @@ export class ImportarComponent implements OnInit {
         if (productos && !productos.status) {
           basicAlert(TYPE_ALERT.ERROR, productos.message);
         }
-        if (productos.length > 0) {
+        if (productos.productos.length > 0) {
           this.habilitaGuardar = true;
           this.dataExport = [];
           // Setear dataExport
-          productos.forEach(item => {
+          productos.productos.forEach(item => {
             const newItemExport = new ProductExport();
             newItemExport.name = item.name;
             newItemExport.price = item.price;
@@ -460,14 +460,16 @@ export class ImportarComponent implements OnInit {
             newItemExport.ean = item.ean;
             this.dataExport.push(newItemExport);
           });
+          this.dataSupplier = productos.productos;
+          closeAlert();
+          return this.dataSupplier;
         } else {
           basicAlert(TYPE_ALERT.WARNING, 'No se encontraron productos.');
+          return [];
         }
-        this.dataSupplier = productos;
-        closeAlert();
-        return this.dataSupplier;
       } else {
         basicAlert(TYPE_ALERT.WARNING, 'No existen elementos para buscar.');
+        return [];
       }
     }
   }
@@ -725,6 +727,13 @@ export class ImportarComponent implements OnInit {
         const catalogIngrams = await this.externalAuthService.getCatalogIngrams();
         console.log('productosIngram: ', productosIngram);
         console.log('catalogIngrams: ', catalogIngrams);
+        if (productosIngram && !productosIngram.status) {
+          return await {
+            status: productosIngram.status,
+            message: productosIngram.message,
+            productos: []
+          }
+        }
         for (const prodIngram of productosIngram.pricesIngram) {
           if (prodIngram.availability && prodIngram.availability.availabilityByWarehouse) {
             const warehouses: AvailabilityByWarehouse[] = [];
@@ -747,7 +756,6 @@ export class ImportarComponent implements OnInit {
                   if (prodIngram.availability && prodIngram.availability.availabilityByWarehouse
                     && prodIngram.availability.availabilityByWarehouse.length > 0) {
                     const itemData: Product = await this.setProduct(supplier.slug, prodIngram, catalogIngram);
-                    console.log('prodIngram.discounts: ', prodIngram.discounts);
                     if (itemData.id !== undefined) {
                       productos.push(itemData);
                     }
@@ -759,7 +767,11 @@ export class ImportarComponent implements OnInit {
             }
           }
         }
-        return await productos;
+        return await {
+          status: true,
+          message: 'Productos listos para agregar.',
+          productos
+        }
       default:
         break;
     }
@@ -816,7 +828,7 @@ export class ImportarComponent implements OnInit {
 
   getAlmacenIngram(branch): BranchOffices {
     const almacen = new BranchOffices();
-    almacen.id = branch.warehouseId;
+    almacen.id = branch.warehouseId.toString();
     almacen.name = branch.location;
     const parts = branch.location.split('-');
     if (parts.length > 1) {
@@ -1048,7 +1060,7 @@ export class ImportarComponent implements OnInit {
               itemData.until = this.getFechas(new Date());
               itemData.top = false;
               itemData.featured = featured;
-              itemData.new = null;
+              itemData.new = false;
               itemData.sold = null;
               itemData.stock = disponible;
               itemData.sku = item.vendorNumber.trim();
@@ -1058,6 +1070,32 @@ export class ImportarComponent implements OnInit {
               unidad.name = 'Pieza';
               unidad.slug = 'pieza';
               itemData.unidadDeMedida = unidad;
+              // Categorias
+              itemData.category = [];
+              if (item.category) {
+                const c = new Categorys();
+                c.name = item.category;
+                c.slug = slugify(item.category, { lower: true });
+                itemData.category.push(c);
+              } else {
+                const c = new Categorys();
+                c.name = '';
+                c.slug = '';
+                itemData.category.push(c);
+              }
+              // SubCategorias
+              itemData.subCategory = [];
+              if (item.subCategory) {
+                const c1 = new Categorys();
+                c1.name = item.subCategory;
+                c1.slug = slugify(item.subCategory, { lower: true });
+                itemData.subCategory.push(c1);
+              } else {
+                const c1 = new Categorys();
+                c1.name = '';
+                c1.slug = '';
+                itemData.subCategory.push(c1);
+              }
               // Marcas
               itemData.brand = item.vendorName.toLowerCase();
               itemData.brands = [];
@@ -1068,18 +1106,27 @@ export class ImportarComponent implements OnInit {
               s.idProveedor = proveedor;
               s.codigo = item.vendorPartNumber;
               s.cantidad = this.stockMinimo;
+              s.price = item.precio;
+              s.moneda = item.pricing.currencyCode === 'MXP' ? 'MXN' : 'USD';
               // TO-DO Promociones
               s.moneda = item.pricing.currencyCode;
               s.branchOffices = branchOfficesIngram;
+              s.category = new Categorys();
+              s.subCategory = new Categorys();
+              if (item.category) {
+                s.category.slug = slugify(item.category, { lower: true });;
+                s.category.name = item.category;
+              }
+              if (item.subCategory) {
+                s.subCategory.slug = slugify(item.subCategory, { lower: true });;
+                s.subCategory.name = item.subCategory;
+              }
               itemData.suppliersProd = s;
+              itemData.variants = [];
             }
           }
-          console.log('itemData: ', itemData);
           return itemData;
         } catch (error) {
-          console.log('error.message: ', error.message);
-          console.log('error: ', error);
-          console.log('itemData: ', itemData);
           return itemData;
         }
       case 'syscom':
