@@ -1,14 +1,17 @@
 import Swal from 'sweetalert2';
 import { TYPE_ALERT } from './values.config';
 
-export function basicAlert(icon = TYPE_ALERT.SUCCESS, title: string = '') {
-  Swal.fire({
-    title,
-    icon,
+export function basicAlert(icon = TYPE_ALERT.SUCCESS, title: string = ''): void {
+  const Toast = Swal.mixin({
+    toast: true,
     position: 'top',
     showConfirmButton: false,
-    toast: true,
-    timer: 3000,
+    timer: 3000
+  });
+
+  Toast.fire({
+    title,
+    icon,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer);

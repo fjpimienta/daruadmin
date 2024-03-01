@@ -436,37 +436,40 @@ export class ImportarComponent implements OnInit {
         this.supplier.slug === 'ingram' || this.supplier.slug === 'exel') {
         loadData('Importando los productos', 'Esperar la carga de los productos.');
         const productos = await this.getProducts(this.supplier, this.apiSelect, this.catalogValues);
-        if (productos) {
-          if (productos.length > 0) {
-            this.habilitaGuardar = true;
-            this.dataExport = [];
-            // Setear dataExport
-            productos.forEach(item => {
-              const newItemExport = new ProductExport();
-              newItemExport.name = item.name;
-              newItemExport.price = item.price;
-              newItemExport.sale_price = item.sale_price;
-              newItemExport.partnumber = item.partnumber;
-              newItemExport.brand = item.brand;
-              newItemExport.exchangeRate = item.exchangeRate;
-              newItemExport.stock = item.stock;
-              newItemExport.sku = item.sku;
-              newItemExport.suppliersProd = item.suppliersProd;
-              newItemExport.descuentos = item.descuentos;
-              newItemExport.promociones = item.promociones;
-              newItemExport.upc = item.upc;
-              newItemExport.ean = item.ean;
-              this.dataExport.push(newItemExport);
-            });
-          } else {
-            basicAlert(TYPE_ALERT.WARNING, 'No se encontraron productos.');
-          }
+        if (productos && !productos.status) {
+          basicAlert(TYPE_ALERT.ERROR, productos.message);
         }
-        this.dataSupplier = productos;
-        closeAlert();
-        return this.dataSupplier;
+        if (productos.productos.length > 0) {
+          this.habilitaGuardar = true;
+          this.dataExport = [];
+          // Setear dataExport
+          productos.productos.forEach(item => {
+            const newItemExport = new ProductExport();
+            newItemExport.name = item.name;
+            newItemExport.price = item.price;
+            newItemExport.sale_price = item.sale_price;
+            newItemExport.partnumber = item.partnumber;
+            newItemExport.brand = item.brand;
+            newItemExport.exchangeRate = item.exchangeRate;
+            newItemExport.stock = item.stock;
+            newItemExport.sku = item.sku;
+            newItemExport.suppliersProd = item.suppliersProd;
+            newItemExport.descuentos = item.descuentos;
+            newItemExport.promociones = item.promociones;
+            newItemExport.upc = item.upc;
+            newItemExport.ean = item.ean;
+            this.dataExport.push(newItemExport);
+          });
+          this.dataSupplier = productos.productos;
+          closeAlert();
+          return this.dataSupplier;
+        } else {
+          basicAlert(TYPE_ALERT.WARNING, 'No se encontraron productos.');
+          return [];
+        }
       } else {
         basicAlert(TYPE_ALERT.WARNING, 'No existen elementos para buscar.');
+        return [];
       }
     }
   }
@@ -525,15 +528,27 @@ export class ImportarComponent implements OnInit {
       case 'cva':
         // Carga de Productos
         const almacenes = await this.externalAuthService.getSucursalesCva();
-        if (almacenes.status && almacenes.listSucursalesCva.length > 0) {
+        if (almacenes && !almacenes.status) {
+          return await {
+            status: almacenes.status,
+            message: almacenes.message,
+            productos: []
+          }
+        }
+        if (almacenes.listSucursalesCva.length > 0) {
           const groupsCva = await this.externalAuthService.getGroupsCva();
+          if (groupsCva && !groupsCva.status) {
+            return await {
+              status: groupsCva.status,
+              message: groupsCva.message,
+              productos: []
+            }
+          }
           let productosCva: Product[] = [];
-
           function excludeGroups(groupsToExclude: string[], allGroups: { grupo: string }[]): { grupo: string }[] {
             const filteredGroups = allGroups.filter(groupObj => !groupsToExclude.includes(groupObj.grupo));
             return filteredGroups;
           }
-
           // Grupos para excluir
           const groupsToExclude = [
             "ACCESO VIDEOCONFERENCIA",
@@ -603,6 +618,13 @@ export class ImportarComponent implements OnInit {
           const filteredGroups = excludeGroups(groupsToExclude, groupsCva.listGroupsCva);
           for (const group of filteredGroups) {
             const productosCvaTmp = await this.externalAuthService.getProductsPricesCva(group.grupo);
+            if (productosCvaTmp && !productosCvaTmp.status) {
+              return await {
+                status: productosCvaTmp.status,
+                message: productosCvaTmp.message,
+                productos: []
+              }
+            }
             if (productosCvaTmp && productosCvaTmp.listPricesCva !== null && productosCvaTmp.listPricesCva.length > 0) {
               productosCva.push(...productosCvaTmp.listPricesCva);
             }
@@ -619,57 +641,99 @@ export class ImportarComponent implements OnInit {
               }
               i += 1;
             }
+            return await {
+              status: true,
+              message: 'Productos listos para agregar.',
+              productos
+            }
           } else {
-            return await [];
+            return await {
+              status: false,
+              message: 'No se encontraron productos para ingresar.',
+              productos: []
+            }
           }
         } else {
-          return await [];
+          return await {
+            status: almacenes.status,
+            message: almacenes.message,
+            productos: []
+          }
         }
-        return await productos;
       case 'ct':
         this.ctAlmacenes = await this.getAlmacenes();
         const productosCt = await this.externalAuthService.getProductsCt();
-        if (productosCt.status) {
-          let productsCtFtp: any[] = [];
-          const productosCtJson = await this.externalAuthService.getProductsCtJson();
-          if (productosCtJson && productosCtJson.status && productosCtJson.jsonProductsCt && productosCtJson.jsonProductsCt.length > 0) {
-            productsCtFtp = productsCtFtp.concat(productosCtJson.jsonProductsCt);
-          }
-          const productosCtXml = await this.externalAuthService.getProductsCtXml();
-          if (productosCtXml && productosCtXml.status && productosCtXml.jsonProductsCtHP && productosCtXml.jsonProductsCtHP.length > 0) {
-            productsCtFtp = productsCtFtp.concat(productosCtXml.jsonProductsCtHP);
-          }
-          let i = 1;
-          const excludedCategories = [
-            'Caretas', 'Cubrebocas', 'Desinfectantes', 'Equipo', 'Termómetros',
-            'Acceso', 'Accesorios para seguridad', 'Camaras Deteccion',
-            'Control de Acceso', 'Sensores', 'Tarjetas de Acceso', 'Timbres',
-            'Administrativo', 'Contabilidad', 'Nóminas', 'Timbres Fiscales',
-            'Análogos', 'Video Conferencia', 'Accesorios de Papeleria', 'Articulos de Escritura',
-            'Basico de Papeleria', 'Cabezales', 'Cuadernos', 'Papel', 'Papelería', 'Camaras Deteccion',
-            'Apple', 'Accesorios para Apple', 'Adaptadores para Apple', 'Audífonos para Apple', 'Cables Lightning', 'iMac', 'iPad', 'MacBook'
-          ];
-          for (const product of productosCt.stockProductsCt) {
-            if (!excludedCategories.includes(product.subcategoria)) {
-              productsCtFtp.forEach(async productFtp => {
-                if (product.codigo === productFtp.clave) {
-                  const productTmp: IProductoCt = this.convertirPromocion(product);
-                  const itemData: Product = await this.setProduct(supplier.slug, productTmp, productFtp);
-                  if (itemData.id !== undefined) {
-                    productos.push(itemData);
-                  }
-                }
-              });
-            }
+        if (productosCt && !productosCt.status) {
+          return await {
+            status: productosCt.status,
+            message: productosCt.message,
+            productos: []
           }
         }
-        return await productos;
+        let productsCtFtp: any[] = [];
+        const productosCtJson = await this.externalAuthService.getProductsCtJson();
+        if (productosCtJson && !productosCtJson.status) {
+          return await {
+            status: productosCtJson.status,
+            message: productosCtJson.message,
+            productos: []
+          }
+        }
+        if (productosCtJson && productosCtJson.status && productosCtJson.jsonProductsCt && productosCtJson.jsonProductsCt.length > 0) {
+          productsCtFtp = productsCtFtp.concat(productosCtJson.jsonProductsCt);
+        }
+        const productosCtXml = await this.externalAuthService.getProductsCtXml();
+        if (productosCtXml && !productosCtXml.status) {
+          return await {
+            status: productosCtXml.status,
+            message: productosCtXml.message,
+            productos: []
+          }
+        }
+        if (productosCtXml && productosCtXml.status && productosCtXml.jsonProductsCtHP && productosCtXml.jsonProductsCtHP.length > 0) {
+          productsCtFtp = productsCtFtp.concat(productosCtXml.jsonProductsCtHP);
+        }
+        let i = 1;
+        const excludedCategories = [
+          'Caretas', 'Cubrebocas', 'Desinfectantes', 'Equipo', 'Termómetros',
+          'Acceso', 'Accesorios para seguridad', 'Camaras Deteccion',
+          'Control de Acceso', 'Sensores', 'Tarjetas de Acceso', 'Timbres',
+          'Administrativo', 'Contabilidad', 'Nóminas', 'Timbres Fiscales',
+          'Análogos', 'Video Conferencia', 'Accesorios de Papeleria', 'Articulos de Escritura',
+          'Basico de Papeleria', 'Cabezales', 'Cuadernos', 'Papel', 'Papelería', 'Camaras Deteccion',
+          'Apple', 'Accesorios para Apple', 'Adaptadores para Apple', 'Audífonos para Apple', 'Cables Lightning', 'iMac', 'iPad', 'MacBook'
+        ];
+        for (const product of productosCt.stockProductsCt) {
+          if (!excludedCategories.includes(product.subcategoria)) {
+            productsCtFtp.forEach(async productFtp => {
+              if (product.codigo === productFtp.clave) {
+                const productTmp: IProductoCt = this.convertirPromocion(product);
+                const itemData: Product = await this.setProduct(supplier.slug, productTmp, productFtp);
+                if (itemData.id !== undefined) {
+                  productos.push(itemData);
+                }
+              }
+            });
+          }
+        }
+        return await {
+          status: true,
+          message: 'Productos listos para agregar.',
+          productos
+        }
       case 'ingram':
         console.log('Import Ingram Products')
         const productosIngram = await this.externalAuthService.getProductsIngram();
         const catalogIngrams = await this.externalAuthService.getCatalogIngrams();
         console.log('productosIngram: ', productosIngram);
         console.log('catalogIngrams: ', catalogIngrams);
+        if (productosIngram && !productosIngram.status) {
+          return await {
+            status: productosIngram.status,
+            message: productosIngram.message,
+            productos: []
+          }
+        }
         for (const prodIngram of productosIngram.pricesIngram) {
           if (prodIngram.availability && prodIngram.availability.availabilityByWarehouse) {
             const warehouses: AvailabilityByWarehouse[] = [];
@@ -692,7 +756,6 @@ export class ImportarComponent implements OnInit {
                   if (prodIngram.availability && prodIngram.availability.availabilityByWarehouse
                     && prodIngram.availability.availabilityByWarehouse.length > 0) {
                     const itemData: Product = await this.setProduct(supplier.slug, prodIngram, catalogIngram);
-                    console.log('prodIngram.discounts: ', prodIngram.discounts);
                     if (itemData.id !== undefined) {
                       productos.push(itemData);
                     }
@@ -704,7 +767,11 @@ export class ImportarComponent implements OnInit {
             }
           }
         }
-        return await productos;
+        return await {
+          status: true,
+          message: 'Productos listos para agregar.',
+          productos
+        }
       default:
         break;
     }
@@ -761,7 +828,7 @@ export class ImportarComponent implements OnInit {
 
   getAlmacenIngram(branch): BranchOffices {
     const almacen = new BranchOffices();
-    almacen.id = branch.warehouseId;
+    almacen.id = branch.warehouseId.toString();
     almacen.name = branch.location;
     const parts = branch.location.split('-');
     if (parts.length > 1) {
@@ -993,7 +1060,7 @@ export class ImportarComponent implements OnInit {
               itemData.until = this.getFechas(new Date());
               itemData.top = false;
               itemData.featured = featured;
-              itemData.new = null;
+              itemData.new = false;
               itemData.sold = null;
               itemData.stock = disponible;
               itemData.sku = item.vendorNumber.trim();
@@ -1003,6 +1070,32 @@ export class ImportarComponent implements OnInit {
               unidad.name = 'Pieza';
               unidad.slug = 'pieza';
               itemData.unidadDeMedida = unidad;
+              // Categorias
+              itemData.category = [];
+              if (item.category) {
+                const c = new Categorys();
+                c.name = item.category;
+                c.slug = slugify(item.category, { lower: true });
+                itemData.category.push(c);
+              } else {
+                const c = new Categorys();
+                c.name = '';
+                c.slug = '';
+                itemData.category.push(c);
+              }
+              // SubCategorias
+              itemData.subCategory = [];
+              if (item.subCategory) {
+                const c1 = new Categorys();
+                c1.name = item.subCategory;
+                c1.slug = slugify(item.subCategory, { lower: true });
+                itemData.subCategory.push(c1);
+              } else {
+                const c1 = new Categorys();
+                c1.name = '';
+                c1.slug = '';
+                itemData.subCategory.push(c1);
+              }
               // Marcas
               itemData.brand = item.vendorName.toLowerCase();
               itemData.brands = [];
@@ -1013,18 +1106,27 @@ export class ImportarComponent implements OnInit {
               s.idProveedor = proveedor;
               s.codigo = item.vendorPartNumber;
               s.cantidad = this.stockMinimo;
+              s.price = item.precio;
+              s.moneda = item.pricing.currencyCode === 'MXP' ? 'MXN' : 'USD';
               // TO-DO Promociones
               s.moneda = item.pricing.currencyCode;
               s.branchOffices = branchOfficesIngram;
+              s.category = new Categorys();
+              s.subCategory = new Categorys();
+              if (item.category) {
+                s.category.slug = slugify(item.category, { lower: true });;
+                s.category.name = item.category;
+              }
+              if (item.subCategory) {
+                s.subCategory.slug = slugify(item.subCategory, { lower: true });;
+                s.subCategory.name = item.subCategory;
+              }
               itemData.suppliersProd = s;
+              itemData.variants = [];
             }
           }
-          console.log('itemData: ', itemData);
           return itemData;
         } catch (error) {
-          console.log('error.message: ', error.message);
-          console.log('error: ', error);
-          console.log('itemData: ', itemData);
           return itemData;
         }
       case 'syscom':
