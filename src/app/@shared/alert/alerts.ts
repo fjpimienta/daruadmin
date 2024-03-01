@@ -227,12 +227,13 @@ export const closeAlert = () => {
 }
 
 export const infoEventAlert = async (title: string, html: string, typeAlert: TYPE_ALERT = TYPE_ALERT.WARNING) => {
-  return await Swal.fire({
+  const result = await Swal.fire({
     title,
     html,
     icon: typeAlert,
-    preConfirm: () => {
-      return true;
-    }
+    showConfirmButton: false,
+    timerProgressBar: true,
+    timer: 3000
   });
+  return result;
 }
