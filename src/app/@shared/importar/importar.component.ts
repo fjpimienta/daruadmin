@@ -738,7 +738,7 @@ export class ImportarComponent implements OnInit {
           if (prodIngram.availability && prodIngram.availability.availabilityByWarehouse) {
             const warehouses: AvailabilityByWarehouse[] = [];
             for (const almacen of prodIngram.availability.availabilityByWarehouse) {
-              if (almacen.quantityBackordered >= this.stockMinimo) {
+              if (almacen.quantityAvailable >= this.stockMinimo) {
                 const warehouse: AvailabilityByWarehouse = almacen;
                 warehouses.push(warehouse);
               }
@@ -751,8 +751,6 @@ export class ImportarComponent implements OnInit {
                   return cat.imSKU.trim() === prodIngram.ingramPartNumber.trim();
                 });
                 if (catalogIngram) {
-                  console.log('prodIngram: ', prodIngram);
-                  console.log('catalogIngram: ', catalogIngram);
                   if (prodIngram.availability && prodIngram.availability.availabilityByWarehouse
                     && prodIngram.availability.availabilityByWarehouse.length > 0) {
                     const itemData: Product = await this.setProduct(supplier.slug, prodIngram, catalogIngram);
@@ -839,8 +837,7 @@ export class ImportarComponent implements OnInit {
     almacen.cp = '';
     almacen.latitud = '';
     almacen.longitud = '';
-    almacen.cantidad = branch.quantityBackordered;
-    // almacen.cantidad = branch.quantityAvailable;
+    almacen.cantidad = branch.quantityAvailable;
     return almacen;
   }
 
@@ -1016,6 +1013,7 @@ export class ImportarComponent implements OnInit {
     const desc = new Descuentos();
     const promo = new Promociones();
     let disponible = 0;
+    let price = 0;
     let salePrice = 0;
 
     switch (proveedor) {
@@ -1030,29 +1028,35 @@ export class ImportarComponent implements OnInit {
               // console.log('availabilityByWarehouse.element: ', element);
               const almacen = this.getAlmacenIngram(element);
               if (almacen.cantidad >= this.stockMinimo) {
-                console.log('availabilityByWarehouse.almacen.cantidad: ', almacen.cantidad);
                 disponible += almacen.cantidad;
                 branchOfficesIngram.push(almacen);
               }
             }
-            console.log('branchOfficesIngram: ', branchOfficesIngram);
             if (branchOfficesIngram.length > 0) {
               // TO-DO Promociones
+              price = 0;
               salePrice = 0;
               itemData.id = item.vendorPartNumber.trim();
               itemData.name = productJson.descriptionLine1.trim();
               itemData.slug = slugify(productJson.descriptionLine1.trim(), { lower: true });
               itemData.short_desc = productJson.descriptionLine1.trim() + '. ' + productJson.descriptionLine2.trim();
-              if (item.pricing.retailPrice > 0) {
+              if (item.discounts && item.discounts.length > 0) {
+                if (item.discounts[0].specialPricingMinQuantity > 0 && item.discounts[0].specialPricingDiscount > 0) {
+                  salePrice = item.discounts[0].specialPricingDiscount
+                }
+              }
+              if (item.pricing.customerPrice > 0) {
+                price = item.pricing.customerPrice;           // Vienen dos precios customerPrice y retailPrice
                 if (item.moneda === 'USD') {
-                  itemData.price = parseFloat((parseFloat(item.pricing.retailPrice) * this.exchangeRate * this.utilidad * this.iva).toFixed(2));
+                  itemData.price = parseFloat((price * this.exchangeRate * this.utilidad * this.iva).toFixed(2));
                   itemData.sale_price = parseFloat((salePrice * this.exchangeRate * this.utilidad * this.iva).toFixed(2));
                 } else {
-                  itemData.price = parseFloat(item.pricing.retailPrice) * this.utilidad * this.iva;
-                  itemData.sale_price = salePrice * this.utilidad * this.iva;
+                  itemData.price = parseFloat((price * this.utilidad * this.iva).toFixed(2));
+                  itemData.sale_price = parseFloat((salePrice * this.utilidad * this.iva).toFixed(2));
                 }
               } else {
-                itemData.price = salePrice;
+                itemData.price = price;
+                itemData.sale_price = salePrice;
               }
               itemData.exchangeRate = this.exchangeRate;
               itemData.review = 0;
@@ -1097,16 +1101,16 @@ export class ImportarComponent implements OnInit {
                 itemData.subCategory.push(c1);
               }
               // Marcas
-              itemData.brand = item.vendorName.toLowerCase();
+              itemData.brand = item.vendorName.replace(/[^\w\s]/gi, '').toLowerCase();
               itemData.brands = [];
-              b.name = item.vendorName;
-              b.slug = slugify(item.vendorName, { lower: true });
+              b.name = item.vendorName.replace(/[^\w\s]/gi, '');
+              b.slug = slugify(b.name, { lower: true });
               itemData.brands.push(b);
-              // SupplierProd                 TO-DO
               s.idProveedor = proveedor;
               s.codigo = item.vendorPartNumber;
               s.cantidad = this.stockMinimo;
-              s.price = item.precio;
+              s.price = price;
+              s.sale_price = salePrice;
               s.moneda = item.pricing.currencyCode === 'MXP' ? 'MXN' : 'USD';
               // TO-DO Promociones
               s.moneda = item.pricing.currencyCode;
