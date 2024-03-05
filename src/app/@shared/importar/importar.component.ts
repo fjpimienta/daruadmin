@@ -1107,7 +1107,7 @@ export class ImportarComponent implements OnInit {
               b.slug = slugify(b.name, { lower: true });
               itemData.brands.push(b);
               s.idProveedor = proveedor;
-              s.codigo = item.vendorPartNumber;
+              s.codigo = productJson.imSKU.trim();
               s.cantidad = this.stockMinimo;
               s.price = price;
               s.sale_price = salePrice;
