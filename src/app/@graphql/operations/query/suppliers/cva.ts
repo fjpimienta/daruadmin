@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { BRANDSCVA_FRAGMENT, GROUPSCVA_FRAGMENT, ORDERSCVA_FRAGMENT, PAQUETERIASCVA_FRAGMENT, PRODUCTOSCVA_FRAGMENT, SOLUCIONESCVA_FRAGMENT, SUCURSALESCVA_FRAGMENT } from '../../fragment/suppliers/cva';
+import { PRODUCT_FRAGMENT } from '@graphql/operations/fragment/product';
 
 export const BRANDSCVA_LIST_QUERY = gql`
   query listBrandsCva {
@@ -72,11 +73,11 @@ export const PRODUCTOSCVA_LIST_QUERY = gql`
       status
       message
       listProductsCva {
-        ...ProductosCvaObject
+        ...ProductObject
       }
     }
   }
-  ${PRODUCTOSCVA_FRAGMENT}
+  ${PRODUCT_FRAGMENT}
 `;
 
 export const PRODUCTSPRICECVA_LIST_QUERY = gql`

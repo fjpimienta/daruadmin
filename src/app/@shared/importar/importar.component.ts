@@ -526,142 +526,21 @@ export class ImportarComponent implements OnInit {
     const productos: Product[] = [];
     switch (supplier.slug) {
       case 'cva':
-        // Carga de Productos
-        const almacenes = await this.externalAuthService.getSucursalesCva();
-        if (almacenes && !almacenes.status) {
+        const productosCva = await this.externalAuthService.getProductsCva();
+        if (productosCva && !productosCva.status) {
           return await {
-            status: almacenes.status,
-            message: almacenes.message,
+            status: productosCva.status,
+            message: productosCva.message,
             productos: []
           }
         }
-        if (almacenes.listSucursalesCva.length > 0) {
-          const groupsCva = await this.externalAuthService.getGroupsCva();
-          if (groupsCva && !groupsCva.status) {
-            return await {
-              status: groupsCva.status,
-              message: groupsCva.message,
-              productos: []
-            }
-          }
-          let productosCva: Product[] = [];
-          function excludeGroups(groupsToExclude: string[], allGroups: { grupo: string }[]): { grupo: string }[] {
-            const filteredGroups = allGroups.filter(groupObj => !groupsToExclude.includes(groupObj.grupo));
-            return filteredGroups;
-          }
-          // Grupos para excluir
-          const groupsToExclude = [
-            "ACCESO VIDEOCONFERENCIA",
-            "AIRE ACONDICIONADO",
-            "ALARMAS",
-            "ASPIRADORAS",
-            "BASCULA",
-            "CAFETERA",
-            "CALCULADORA",
-            "CABLEADO ESTRUCTURADO",
-            "CONCENTRADOR DE OXIGENO",
-            "CONTADOR DE BILLETES",
-            "CONSOLAS",
-            "CONTROLES",
-            "COPIADORA",
-            "CURSO",
-            "DIGITALIZADOR",
-            "DRONES",
-            "EMPAQUES",
-            "FREIDORA DE AIRE",
-            "FAX",
-            "FUNDAS",
-            "HANDHELD",
-            "HIDROLAVADORAS",
-            "INSUMOS",
-            "INSUMOS GHIA",
-            "INTERFON",
-            "JUGUETES",
-            "KIOSKO",
-            "LICUADORA",
-            "LINEA BLANCA",
-            "MAQUINA PARA CORTAR CABELLO",
-            "MAQUINAS DE COSER",
-            "MAQUINAS DE ESCRIBIR",
-            "MATERIALES PARA PRODUCCION GHIA",
-            "MUEBLES PARA OFICINA",
-            "PCS",
-            "PASE",
-            "PARTES",
-            "PIZARRON",
-            "PORTA RETRATO DIGITAL",
-            "POLIZAS DE GARANTIA",
-            "PRODUCTOS DE LIMPIEZA",
-            "PROMOCIONALES",
-            "RADIO RELOJ",
-            "RASURADORA",
-            "REFACCIONES",
-            "EFACCIONES GHIA / HAIER",
-            "REFACCIONES PARA UPS",
-            "REFACCIONES GHIA / HAIER",
-            "REPRODUCTORES",
-            "SERVICIOS CLOUD CVA",
-            "SERVICIOS METROCARRIER",
-            "SERVICIOS VIDEOCONFERENCIA",
-            "SINTONIZADOR",
-            "SOLUCION INTERWRITE",
-            "SOLUCIONES GSM",
-            "VENTILADORES",
-            "TRITURADORA DE DOCUMENTOS",
-            "VENTILADORES",
-            "TERMOMETRO",
-            "TIPO DE CONECTIVIDAD",
-            "PIZARRON",
-            "CAMARAS"
-          ];
-          // Obtener la lista de grupos excluyendo los especificados
-          const filteredGroups = excludeGroups(groupsToExclude, groupsCva.listGroupsCva);
-          for (const group of filteredGroups) {
-            const productosCvaTmp = await this.externalAuthService.getProductsPricesCva(group.grupo);
-            if (productosCvaTmp && !productosCvaTmp.status) {
-              return await {
-                status: productosCvaTmp.status,
-                message: productosCvaTmp.message,
-                productos: []
-              }
-            }
-            if (productosCvaTmp && productosCvaTmp.listPricesCva !== null && productosCvaTmp.listPricesCva.length > 0) {
-              productosCva.push(...productosCvaTmp.listPricesCva);
-            }
-          }
-          this.cvaAlmacenes = almacenes.listSucursalesCva;
-          if (productosCva.length > 0) {
-            let i = 1;
-            for (const product of productosCva) {
-              let itemData = new Product();
-              product.id = i;
-              itemData = await this.setProduct(supplier.slug, product);
-              if (itemData.id !== undefined) {
-                productos.push(itemData);
-              }
-              i += 1;
-            }
-            return await {
-              status: true,
-              message: 'Productos listos para agregar.',
-              productos
-            }
-          } else {
-            return await {
-              status: false,
-              message: 'No se encontraron productos para ingresar.',
-              productos: []
-            }
-          }
-        } else {
-          return await {
-            status: almacenes.status,
-            message: almacenes.message,
-            productos: []
-          }
+        const productsCva = productosCva.listProductsCva;
+        return await {
+          status: true,
+          message: 'Productos listos para agregar.',
+          productos: productsCva
         }
       case 'ct':
-        this.ctAlmacenes = await this.getAlmacenes();
         const productosCt = await this.externalAuthService.getProductsCt();
         if (productosCt && !productosCt.status) {
           return await {
@@ -670,56 +549,11 @@ export class ImportarComponent implements OnInit {
             productos: []
           }
         }
-        let productsCtFtp: any[] = [];
-        const productosCtJson = await this.externalAuthService.getProductsCtJson();
-        if (productosCtJson && !productosCtJson.status) {
-          return await {
-            status: productosCtJson.status,
-            message: productosCtJson.message,
-            productos: []
-          }
-        }
-        if (productosCtJson && productosCtJson.status && productosCtJson.jsonProductsCt && productosCtJson.jsonProductsCt.length > 0) {
-          productsCtFtp = productsCtFtp.concat(productosCtJson.jsonProductsCt);
-        }
-        const productosCtXml = await this.externalAuthService.getProductsCtXml();
-        if (productosCtXml && !productosCtXml.status) {
-          return await {
-            status: productosCtXml.status,
-            message: productosCtXml.message,
-            productos: []
-          }
-        }
-        if (productosCtXml && productosCtXml.status && productosCtXml.jsonProductsCtHP && productosCtXml.jsonProductsCtHP.length > 0) {
-          productsCtFtp = productsCtFtp.concat(productosCtXml.jsonProductsCtHP);
-        }
-        let i = 1;
-        const excludedCategories = [
-          'Caretas', 'Cubrebocas', 'Desinfectantes', 'Equipo', 'Termómetros',
-          'Acceso', 'Accesorios para seguridad', 'Camaras Deteccion',
-          'Control de Acceso', 'Sensores', 'Tarjetas de Acceso', 'Timbres',
-          'Administrativo', 'Contabilidad', 'Nóminas', 'Timbres Fiscales',
-          'Análogos', 'Video Conferencia', 'Accesorios de Papeleria', 'Articulos de Escritura',
-          'Basico de Papeleria', 'Cabezales', 'Cuadernos', 'Papel', 'Papelería', 'Camaras Deteccion',
-          'Apple', 'Accesorios para Apple', 'Adaptadores para Apple', 'Audífonos para Apple', 'Cables Lightning', 'iMac', 'iPad', 'MacBook'
-        ];
-        for (const product of productosCt.stockProductsCt) {
-          if (!excludedCategories.includes(product.subcategoria)) {
-            productsCtFtp.forEach(async productFtp => {
-              if (product.codigo === productFtp.clave) {
-                const productTmp: IProductoCt = this.convertirPromocion(product);
-                const itemData: Product = await this.setProduct(supplier.slug, productTmp, productFtp);
-                if (itemData.id !== undefined) {
-                  productos.push(itemData);
-                }
-              }
-            });
-          }
-        }
+        const productsCt = productosCt.listProductsCt;
         return await {
           status: true,
           message: 'Productos listos para agregar.',
-          productos
+          productos: productsCt
         }
       case 'ingram':
         console.log('Import Ingram Products')
