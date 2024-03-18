@@ -556,11 +556,7 @@ export class ImportarComponent implements OnInit {
           productos: productsCt
         }
       case 'ingram':
-        console.log('Import Ingram Products')
         const productosIngram = await this.externalAuthService.getProductsIngram();
-        const catalogIngrams = await this.externalAuthService.getCatalogIngrams();
-        console.log('productosIngram: ', productosIngram);
-        console.log('catalogIngrams: ', catalogIngrams);
         if (productosIngram && !productosIngram.status) {
           return await {
             status: productosIngram.status,
@@ -568,41 +564,11 @@ export class ImportarComponent implements OnInit {
             productos: []
           }
         }
-        for (const prodIngram of productosIngram.pricesIngram) {
-          if (prodIngram.availability && prodIngram.availability.availabilityByWarehouse) {
-            const warehouses: AvailabilityByWarehouse[] = [];
-            for (const almacen of prodIngram.availability.availabilityByWarehouse) {
-              if (almacen.quantityAvailable >= this.stockMinimo) {
-                const warehouse: AvailabilityByWarehouse = almacen;
-                warehouses.push(warehouse);
-              }
-            }
-            if (warehouses.length > 0) {
-              if (prodIngram.availability.availabilityByWarehouse.length !== warehouses.length) {
-                prodIngram.availability.availabilityByWarehouse = warehouses;
-                // Si el producto cumple con los requisitos lo agrega.
-                const catalogIngram = catalogIngrams.catalogIngrams.find(cat => {
-                  return cat.imSKU.trim() === prodIngram.ingramPartNumber.trim();
-                });
-                if (catalogIngram) {
-                  if (prodIngram.availability && prodIngram.availability.availabilityByWarehouse
-                    && prodIngram.availability.availabilityByWarehouse.length > 0) {
-                    const itemData: Product = await this.setProduct(supplier.slug, prodIngram, catalogIngram);
-                    if (itemData.id !== undefined) {
-                      productos.push(itemData);
-                    }
-                  }
-                  // } else {
-                  //   console.log('prodIngram.ingramPartNumber.trim(): ', prodIngram.ingramPartNumber.trim());
-                }
-              }
-            }
-          }
-        }
+        const productsIngram = productosIngram.listProductsIngram;
         return await {
           status: true,
           message: 'Productos listos para agregar.',
-          productos
+          productos: productsIngram
         }
       default:
         break;
