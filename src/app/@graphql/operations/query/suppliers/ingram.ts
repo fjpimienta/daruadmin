@@ -1,5 +1,19 @@
 import gql from 'graphql-tag';
 import { CATALOGINGRAM_FRAGMENT, PRODUCTSINGRAM_FRAGMENT } from '@graphql/operations/fragment/suppliers/ingram';
+import { PRODUCT_FRAGMENT } from '@graphql/operations/fragment/product';
+
+export const PRODUCTOSINGRAM_LIST_QUERY = gql`
+  query listProductsIngram {
+    listProductsIngram {
+      status
+      message
+      listProductsIngram {
+        ...ProductObject
+      }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
 
 export const PRODUCTSINGRAM_LIST_QUERY = gql`
   query pricesIngram {

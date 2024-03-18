@@ -1,7 +1,21 @@
 import gql from 'graphql-tag';
 import { ORDERSCT_FRAGMENT, PRODUCTOSCT_FRAGMENT, PRODUCTSCT_FTP_FRAGMENT, STATUS_ORDERCT_FRAGMENT } from '@graphql/operations/fragment/suppliers/ct';
+import { PRODUCT_FRAGMENT } from '@graphql/operations/fragment/product';
 
 export const PRODUCTOSCT_LIST_QUERY = gql`
+  query listProductsCt {
+    listProductsCt {
+      status
+      message
+      listProductsCt {
+        ...ProductObject
+      }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
+
+export const STOCKPRODUCTOSCT_LIST_QUERY = gql`
   query stockProductsCt {
     stockProductsCt {
       status
