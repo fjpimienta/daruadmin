@@ -195,14 +195,14 @@ export class TablePaginationComponent implements OnInit {
     console.log('this.data: ', this.data);
     // Si esta en ventas o Compras CT
     if (this.resultData.listKey === 'deliverys') {
-      if (this.data.ordersCt) {
+      if (this.data && this.data.ordersCt && this.data.ordersCt.length > 0) {
         this.getStatusOrderCt(this.data.ordersCt[0].orderCtResponse.pedidoWeb).then(result => {
           if (result && result.statusOrdersCt && result.statusOrdersCt.pedido !== '') {
             this.guias = result.statusOrdersCt;
           }
         });
       }
-      if (this.data.ordersCva) {
+      if (this.data && this.data.ordersCva) {
 
       }
       this.productos = [];
