@@ -383,7 +383,8 @@
                           order.orderCtConfirmResponse.okMessage : ''}}</td>
                         <td>{{order.orderCtConfirmResponse && order.orderCtConfirmResponse.length >0 ?
                           order.orderCtConfirmResponse.okReference : ''}}</td>
-                        <td>order.warehouses[0].shipments[0].empresa.toUpperCase()</td>
+                        <td>{{order.orderCtConfirmResponse && order.orderCtConfirmResponse.length >0 ?
+                          order.warehouses[0].shipments[0].empresa.toUpperCase() : ''}}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -455,12 +456,12 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>{{data.orderCvaResponse.pedido}}</td>
-                        <td>{{data.orderCvaResponse.estado}}</td>
-                        <td>{{data.orderCvaResponse.total}}</td>
-                        <td>{{data.orderCvaResponse.agentemail}}</td>
-                        <td>{{data.orderCvaResponse.almacenmail}}</td>
+                      <tr *ngFor="let order of data.ordersCva">
+                        <td>{{order.orderCvaResponse.pedido}}</td>
+                        <td>{{order.orderCvaResponse.estado}}</td>
+                        <td>{{order.orderCvaResponse.total}}</td>
+                        <td>{{order.orderCvaResponse.agentemail}}</td>
+                        <td>{{order.orderCvaResponse.almacenmail}}</td>
                         <td>{{data.warehouses[0].shipments[0].empresa.toUpperCase()}}</td>
                       </tr>
                     </tbody>
