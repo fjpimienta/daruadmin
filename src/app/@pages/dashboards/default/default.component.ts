@@ -1,12 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { emailSentBarChart, weeklyEarningChart, monthlyEarningChart } from './data';
+import { supplierBarChart, weeklyEarningChart, monthlyEarningChart } from './data';
 import { ChartType } from './dashboard.model';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EventService } from '../../../@core/services/event.service';
-import { ConfigService } from '../../../@core/services/xconfig.service';
 import { DashboardsService } from '@core/services/dashboard.service';
 import { DashMonthImport, DashSupplierImport, DashWeekImport, WeekDates } from '@core/models/dashboard.models';
-import { tryCatch } from 'rxjs/internal-compatibility';
 
 @Component({
   selector: 'app-default',
@@ -17,7 +14,7 @@ export class DefaultComponent implements OnInit {
 
   isVisible: string;
 
-  emailSentBarChart: ChartType;
+  supplierBarChart: ChartType;
   weeklyEarningChart: ChartType;
   monthlyEarningChart: ChartType;
   transactions: Array<[]>;
@@ -36,11 +33,13 @@ export class DefaultComponent implements OnInit {
   importTotal: number = 0;
   importTotalWeek: number = 0;
   lastDayOfMonth: number = 0;
+  year: number = 0;
+  month: string = '';
+  supplierId: string = '';
+  uniqueSuppliers: string[] = [];
 
   @ViewChild('content') content;
   constructor(
-    private modalService: NgbModal,
-    private configService: ConfigService,
     private eventService: EventService,
     private dashboardsService: DashboardsService
   ) {
@@ -48,17 +47,22 @@ export class DefaultComponent implements OnInit {
 
   async ngOnInit() {
     try {
+      this.isActive = '';
       const importBySupplier = await this.dashboardsService.getImportBySupplier();
       this.importBySupplier = importBySupplier.importBySupplier;
       this.importBySupplier.forEach(supplier => {
         supplier.supplierId = supplier.supplierId.toUpperCase();
         this.importTotal += supplier.totalAmount;
       });
-      const importBySupplierByMonth = await this.dashboardsService.getImportBySupplierByMonth();
+      this.year = new Date().getFullYear();
+      const importBySupplierByMonth = await this.dashboardsService.getImportBySupplierByMonth(
+        this.year, this.month, this.supplierId
+      );
       this.importBySupplierByMonth = importBySupplierByMonth.importBySupplierByMonth
       const currentDate = new Date();
       this.lastDayOfMonth = this.getLastDayOfMonth(currentDate);
       this.currentMonth = this.getCurrentMonth(this.importBySupplierByMonth, currentDate);
+      this.uniqueSuppliers = this.getUniqueSuppliers(this.importBySupplierByMonth);
 
       const importBySupplierByWeek = await this.dashboardsService.getImportBySupplierByWeek();
       this.currentWeek = importBySupplierByWeek;
@@ -85,24 +89,29 @@ export class DefaultComponent implements OnInit {
     }
   }
 
+  // Primero, definimos una función para obtener una lista única de proveedores
+  getUniqueSuppliers(data: any[]): string[] {
+    let uniqueSuppliers: string[] = [];
+    data.forEach(monthData => {
+      monthData.suppliers.forEach(supplier => {
+        if (!uniqueSuppliers.includes(supplier.supplierId)) {
+          uniqueSuppliers.push(supplier.supplierId);
+        }
+      });
+    });
+    return uniqueSuppliers;
+  }
+
   getLastWeekSales(weeklySales: DashWeekImport[]): { totalSales: number; weekDates: WeekDates } {
-    // Encontrar la última semana registrada
     const lastWeek = weeklySales.reduce((maxWeek, currentWeek) => {
       const currentWeekNumber = parseInt(currentWeek.weekOfYear);
       return currentWeekNumber > maxWeek ? currentWeekNumber : maxWeek;
     }, 0);
-
-    // Filtrar ventas correspondientes a la última semana
     const lastWeekSales = weeklySales.filter(week => parseInt(week.weekOfYear) === lastWeek);
-
-    // Calcular total de ventas para la última semana
     const totalSales = lastWeekSales.reduce((total, week) => total + week.totalAmount, 0);
-
-    // Obtener la fecha de inicio y fin de la última semana
     const startDate = new Date(`${lastWeekSales[0].year}-${lastWeekSales[0].monthName}-01`);
     const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 6); // Agregar 6 días para obtener el último día de la semana
-
+    endDate.setDate(endDate.getDate() + 6);
     return {
       totalSales: totalSales,
       weekDates: {
@@ -126,8 +135,6 @@ export class DefaultComponent implements OnInit {
   }
 
   getCurrentMonth(monthlyData: DashMonthImport[], currentDate: Date): DashMonthImport | null {
-    const currentMonth = currentDate.getMonth() + 1;
-    const currentYear = currentDate.getFullYear();
     const currentMonthString = currentDate.toLocaleString('default', { month: 'long' });
     const currentMonthData = monthlyData.find(monthData => monthData.monthName.toUpperCase() === currentMonthString.toUpperCase());
     if (currentMonthData) {
@@ -154,7 +161,7 @@ export class DefaultComponent implements OnInit {
    * Fetches the data
    */
   private fetchData() {
-    this.emailSentBarChart = emailSentBarChart;
+    this.supplierBarChart = supplierBarChart;
     if (this.currentMonth && this.currentMonth.totalAmount > 0 && this.importTotal > 0) {
       const totalMonthP = (this.currentMonth.totalAmount / this.importTotal) * 100;
       const totalMonthPF = Math.round(totalMonthP * 100) / 100;
@@ -173,12 +180,7 @@ export class DefaultComponent implements OnInit {
       const labelMonth = rangoFechas;
       this.weeklyEarningChart.labels = [labelMonth];
     }
-
-    this.isActive = 'year';
-    this.configService.getConfig().subscribe(data => {
-      this.transactions = data.transactions;
-      this.statData = data.statData;
-    });
+    this.supplierReport('');
   }
 
   openModal() {
@@ -186,49 +188,29 @@ export class DefaultComponent implements OnInit {
     // this.modalService.open(this.content, { centered: true });
   }
 
-  weeklyreport() {
-    this.isActive = 'week';
-    this.emailSentBarChart.series =
+  supplierReport(supplierId: string = '') {
+    this.isActive = supplierId;
+    let data: number[] = [];
+    let categories: string[] = [];
+    const filterBySupplier = supplierId !== '';
+    this.importBySupplierByMonth.forEach(monthData => {
+      let totalAmountMonth = 0;
+      monthData.suppliers.forEach(supplier => {
+        if (!filterBySupplier || supplier.supplierId === supplierId) {
+          totalAmountMonth += supplier.totalAmount;
+        }
+      });
+      data.push(totalAmountMonth);
+      categories.push(monthData.monthName);
+    });
+    this.supplierBarChart.series =
       [{
-        name: 'Series A',
-        data: [44, 55, 41, 67, 22, 43, 36, 52, 24, 18, 36, 48]
-      }, {
-        name: 'Series B',
-        data: [11, 17, 15, 15, 21, 14, 11, 18, 17, 12, 20, 18]
-      }, {
-        name: 'Series C',
-        data: [13, 23, 20, 8, 13, 27, 18, 22, 10, 16, 24, 22]
+        name: 'Ventas del Mes',
+        data: data
       }];
-  }
-
-  monthlyreport() {
-    this.isActive = 'month';
-    this.emailSentBarChart.series =
-      [{
-        name: 'Series A',
-        data: [44, 55, 41, 67, 22, 43, 36, 52, 24, 18, 36, 48]
-      }, {
-        name: 'Series B',
-        data: [13, 23, 20, 8, 13, 27, 18, 22, 10, 16, 24, 22]
-      }, {
-        name: 'Series C',
-        data: [11, 17, 15, 15, 21, 14, 11, 18, 17, 12, 20, 18]
-      }];
-  }
-
-  yearlyreport() {
-    this.isActive = 'year';
-    this.emailSentBarChart.series =
-      [{
-        name: 'Series A',
-        data: [13, 23, 20, 8, 13, 27, 18, 22, 10, 16, 24, 22]
-      }, {
-        name: 'Series B',
-        data: [11, 17, 15, 15, 21, 14, 11, 18, 17, 12, 20, 18]
-      }, {
-        name: 'Series C',
-        data: [44, 55, 41, 67, 22, 43, 36, 52, 24, 18, 36, 48]
-      }];
+    this.supplierBarChart.xaxis = {
+      categories: categories,
+    }
   }
 
   /**

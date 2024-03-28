@@ -24,9 +24,15 @@ export class DashboardsService extends ApiService {
     });
   }
 
-  async getImportBySupplierByMonth(): Promise<any> {
+  async getImportBySupplierByMonth(
+    year: number = 0,
+    month: string = '',
+    supplierId: string = ''
+  ): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      this.get(IMPORT_SUPPLIER_MONTH, {}, {}).subscribe(
+      this.get(IMPORT_SUPPLIER_MONTH, {
+        year, month, supplierId
+      }, {}).subscribe(
         (result: any) => {
           resolve(result.importBySupplierByMonth);
         },

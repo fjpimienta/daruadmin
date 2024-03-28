@@ -4,10 +4,10 @@ export class DashSupplierImport {
 }
 
 export class DashMonthImport {
-  // supplierId: string;
-  // year: string;
+  year: number;
   monthName: string;
   totalAmount: number;
+  suppliers: SupplierDash[];
 }
 
 export class DashWeekImport {
@@ -21,4 +21,9 @@ export class DashWeekImport {
 export class WeekDates {
   startDate: Date;
   endDate: Date;
+}
+
+export class SupplierDash {
+  supplierId: string;
+  totalAmount: number;
 }
