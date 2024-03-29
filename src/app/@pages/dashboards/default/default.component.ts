@@ -17,7 +17,7 @@ export class DefaultComponent implements OnInit {
   supplierBarChart: ChartType;
   weeklyEarningChart: ChartType;
   monthlyEarningChart: ChartType;
-  transactions: Array<[]>;
+  transactions: any[] = []
   statData: Array<[]>;
 
   isActive: string;
@@ -81,6 +81,21 @@ export class DefaultComponent implements OnInit {
         if (horizontal != null) {
           horizontal.setAttribute('checked', 'true');
           console.log(horizontal);
+        }
+      }
+      const deliverys = await this.dashboardsService.getDeliverys();
+      if (deliverys && deliverys.deliverys && deliverys.deliverys.length > 0) {
+        for (const delivery of deliverys.deliverys) {
+          const transaction = {
+            id: delivery.id,
+            cliente: delivery.cliente,
+            importe: delivery.importe,
+            messageError: delivery.messageError,
+            registerDate: delivery.registerDate,
+            status: delivery.status,
+            data: delivery
+          };
+          this.transactions.push(transaction);
         }
       }
       this.fetchData();
