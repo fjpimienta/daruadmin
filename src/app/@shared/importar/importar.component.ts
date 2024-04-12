@@ -440,9 +440,7 @@ export class ImportarComponent implements OnInit {
         this.supplier.slug === 'ingram' || this.supplier.slug === 'exel' ||
         this.supplier.slug === 'syscom') {
         loadData('Importando los productos', 'Esperar la carga de los productos.');
-        console.log('onEjecutarAPI');
         const productos = await this.getProducts(this.supplier, this.apiSelect, this.catalogValues);
-        console.log('productos: ', productos);
         if (productos && !productos.status) {
           basicAlert(TYPE_ALERT.ERROR, productos.message);
         }
@@ -563,9 +561,7 @@ export class ImportarComponent implements OnInit {
           productos: productsCt
         }
       case 'ingram':
-        console.log('this.externalAuthService.getProductsIngram()');
         const productosIngram = await this.externalAuthService.getProductsIngram();
-        console.log('productosIngram: ', productosIngram);;
         if (productosIngram && !productosIngram.status) {
           return await {
             status: productosIngram.status,
@@ -580,11 +576,7 @@ export class ImportarComponent implements OnInit {
           productos: productsIngram
         }
       case 'syscom':
-        console.log('supplier: ', supplier);
-        console.log('apiSelect: ', apiSelect);
-        console.log('catalogValues: ', catalogValues);
         const productosSyscom = await this.externalAuthService.getProductsSyscom();
-        console.log('productosSyscom: ', productosSyscom);
         if (productosSyscom && !productosSyscom.status) {
           return await {
             status: productosSyscom.status,
@@ -853,7 +845,6 @@ export class ImportarComponent implements OnInit {
             const branchOfficesIngram: BranchOffices[] = [];
             let featured = false;
             for (const element of item.availability.availabilityByWarehouse) {
-              // console.log('availabilityByWarehouse.element: ', element);
               const almacen = this.getAlmacenIngram(element);
               if (almacen.cantidad >= this.stockMinimo) {
                 disponible += almacen.cantidad;
@@ -1237,13 +1228,6 @@ export class ImportarComponent implements OnInit {
                 itemData.especificaciones.push(espec);
               }
             }
-            // // Para validar un producto en depuracion.
-            // if (productJson.numParte === 'TN630') {
-            //   console.log('promo: ', promo)
-            //   console.log('productJson: ', productJson)
-            //   console.log('item: ', item)
-            //   console.log('itemData: ', itemData)
-            // }
             return itemData;
           }
         }

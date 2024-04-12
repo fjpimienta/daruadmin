@@ -689,20 +689,6 @@ export class ExternalAuthService extends ApiService {
   //#endregion
   //#region Ingram
   async getProductsSyscom(): Promise<any> {
-    console.log('getProductsSyscom');
-    return new Promise<any>((resolve, reject) => {
-      this.get(PRODUCTOSSYSCOM_LIST_QUERY, {}, {}).subscribe(
-        (result: any) => {
-          resolve(result.listProductsSyscom);
-        },
-        (error: any) => {
-          console.log('error: ', error);
-          console.log('error.message: ', error.message);
-          reject(error);
-        });
-    });
-  }
-  async getProductsSyscomxx(): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.get(PRODUCTOSSYSCOM_LIST_QUERY, {}, {}).subscribe(
         (result: any) => {
