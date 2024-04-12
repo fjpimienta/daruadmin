@@ -330,6 +330,10 @@ export class ImportarComponent implements OnInit {
             this.apiName = this.supplier.url_base_api;
             this.apisFilter.push(api);
           }
+          if (this.supplier.slug === 'syscom' && api.return === 'existencia') {
+            this.apiName = this.supplier.url_base_api;
+            this.apisFilter.push(api);
+          }
         }
       });
       if (this.apisFilter.length > 0) {
@@ -433,9 +437,12 @@ export class ImportarComponent implements OnInit {
       }
     } else {
       if (this.catalogValues.length > 0 || this.supplier.slug === 'ct' ||
-        this.supplier.slug === 'ingram' || this.supplier.slug === 'exel') {
+        this.supplier.slug === 'ingram' || this.supplier.slug === 'exel' ||
+        this.supplier.slug === 'syscom') {
         loadData('Importando los productos', 'Esperar la carga de los productos.');
+        console.log('onEjecutarAPI');
         const productos = await this.getProducts(this.supplier, this.apiSelect, this.catalogValues);
+        console.log('productos: ', productos);
         if (productos && !productos.status) {
           basicAlert(TYPE_ALERT.ERROR, productos.message);
         }
@@ -556,7 +563,9 @@ export class ImportarComponent implements OnInit {
           productos: productsCt
         }
       case 'ingram':
+        console.log('this.externalAuthService.getProductsIngram()');
         const productosIngram = await this.externalAuthService.getProductsIngram();
+        console.log('productosIngram: ', productosIngram);;
         if (productosIngram && !productosIngram.status) {
           return await {
             status: productosIngram.status,
@@ -569,6 +578,25 @@ export class ImportarComponent implements OnInit {
           status: true,
           message: 'Productos listos para agregar.',
           productos: productsIngram
+        }
+      case 'syscom':
+        console.log('supplier: ', supplier);
+        console.log('apiSelect: ', apiSelect);
+        console.log('catalogValues: ', catalogValues);
+        const productosSyscom = await this.externalAuthService.getProductsSyscom();
+        console.log('productosSyscom: ', productosSyscom);
+        if (productosSyscom && !productosSyscom.status) {
+          return await {
+            status: productosSyscom.status,
+            message: productosSyscom.message,
+            productos: []
+          }
+        }
+        const productsSyscom = productosSyscom.listProductsSyscom;
+        return await {
+          status: true,
+          message: 'Productos listos para agregar.',
+          productos: productsSyscom
         }
       default:
         break;
