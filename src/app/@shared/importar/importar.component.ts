@@ -330,6 +330,10 @@ export class ImportarComponent implements OnInit {
             this.apiName = this.supplier.url_base_api;
             this.apisFilter.push(api);
           }
+          if (this.supplier.slug === 'syscom' && api.return === 'existencia') {
+            this.apiName = this.supplier.url_base_api;
+            this.apisFilter.push(api);
+          }
         }
       });
       if (this.apisFilter.length > 0) {
@@ -433,7 +437,8 @@ export class ImportarComponent implements OnInit {
       }
     } else {
       if (this.catalogValues.length > 0 || this.supplier.slug === 'ct' ||
-        this.supplier.slug === 'ingram' || this.supplier.slug === 'exel') {
+        this.supplier.slug === 'ingram' || this.supplier.slug === 'exel' ||
+        this.supplier.slug === 'syscom') {
         loadData('Importando los productos', 'Esperar la carga de los productos.');
         const productos = await this.getProducts(this.supplier, this.apiSelect, this.catalogValues);
         if (productos && !productos.status) {
@@ -569,6 +574,21 @@ export class ImportarComponent implements OnInit {
           status: true,
           message: 'Productos listos para agregar.',
           productos: productsIngram
+        }
+      case 'syscom':
+        const productosSyscom = await this.externalAuthService.getProductsSyscom();
+        if (productosSyscom && !productosSyscom.status) {
+          return await {
+            status: productosSyscom.status,
+            message: productosSyscom.message,
+            productos: []
+          }
+        }
+        const productsSyscom = productosSyscom.listProductsSyscom;
+        return await {
+          status: true,
+          message: 'Productos listos para agregar.',
+          productos: productsSyscom
         }
       default:
         break;
@@ -825,7 +845,6 @@ export class ImportarComponent implements OnInit {
             const branchOfficesIngram: BranchOffices[] = [];
             let featured = false;
             for (const element of item.availability.availabilityByWarehouse) {
-              // console.log('availabilityByWarehouse.element: ', element);
               const almacen = this.getAlmacenIngram(element);
               if (almacen.cantidad >= this.stockMinimo) {
                 disponible += almacen.cantidad;
@@ -1209,13 +1228,6 @@ export class ImportarComponent implements OnInit {
                 itemData.especificaciones.push(espec);
               }
             }
-            // // Para validar un producto en depuracion.
-            // if (productJson.numParte === 'TN630') {
-            //   console.log('promo: ', promo)
-            //   console.log('productJson: ', productJson)
-            //   console.log('item: ', item)
-            //   console.log('itemData: ', itemData)
-            // }
             return itemData;
           }
         }
