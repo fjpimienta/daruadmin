@@ -6,6 +6,7 @@ import { OrderCt } from './delivery/orderct.models';
 import { OrderCva } from './delivery/ordercva.models';
 import { UserInput } from './delivery/user.models';
 import { Warehouse } from './delivery/warehouse.models';
+import { OrderSyscom } from './delivery/ordersyscom.models';
 
 /**
  * Clase de Envios
@@ -23,6 +24,7 @@ export class Delivery {
   warehouses?: Warehouse[];
   ordersCt?: OrderCt[];
   ordersCva?: OrderCva[];
+  ordersSyscom?: OrderSyscom[];
   invoiceConfig?: InvoiceConfigInput;
   statusError?: boolean;
   messageError?: string;
