@@ -470,6 +470,39 @@
               </div>
             </ng-template>
           </li>
+          <li *ngIf="data.ordersSyscom && data.ordersSyscom.length >0" [ngbNavItem]="7">
+            <a ngbNavLink>
+              <span class="d-block d-sm-none"><i class="far fa-envelope"></i></span>
+              <span class="d-none d-sm-block">SYSCOM</span>
+            </a>
+            <ng-template ngbNavContent>
+              <div class="address">
+                <h6>Pedido SYSCOM</h6>
+                <div class="table-responsive">
+                  <table class="table mb-0">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>Pedido</th>
+                        <th>Folio Syscom</th>
+                        <th>Forma de Pago</th>
+                        <th>Fecha Creacion</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let order of data.ordersSyscom">
+                        <td>{{order.orderResponseSyscom.resumen.folio}}</td>
+                        <td>{{order.orderResponseSyscom.resumen.folio_pedido}}</td>
+                        <td>{{order.orderResponseSyscom.resumen.forma_pago}}</td>
+                        <td>{{order.orderResponseSyscom.resumen.fecha_creacion}}</td>
+                        <td>{{order.orderResponseSyscom.totales.total}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </ng-template>
+          </li>
         </ul>
         <div [ngbNavOutlet]="nav"></div>
       </div>
