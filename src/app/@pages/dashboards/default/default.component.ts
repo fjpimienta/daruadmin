@@ -227,7 +227,21 @@ export class DefaultComponent implements OnInit {
       }];
     this.supplierBarChart.xaxis = {
       categories: categories,
-    }
+    };
+    this.supplierBarChart.yaxis = {
+      labels: {
+        formatter: function (value) {
+          const valorData = parseFloat(value.toFixed(2));
+          return valorData.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+        }
+      }
+    };
+    this.supplierBarChart.dataLabels = {
+      formatter: function (value) {
+        const valorData = parseFloat(value.toFixed(2));
+        return valorData.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+      }
+    };
   }
 
   /**
