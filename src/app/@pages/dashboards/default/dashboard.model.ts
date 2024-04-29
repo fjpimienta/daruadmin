@@ -8,6 +8,7 @@ export interface ChartType {
     dataLabels?: any;
     legend?: any;
     xaxis?: any;
+    yaxis?: any;
     stroke?: any;
     labels?: any;
 }

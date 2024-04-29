@@ -124,9 +124,11 @@ export class DefaultComponent implements OnInit {
     }, 0);
     const lastWeekSales = weeklySales.filter(week => parseInt(week.weekOfYear) === lastWeek);
     const totalSales = lastWeekSales.reduce((total, week) => total + week.totalAmount, 0);
-    const startDate = new Date(`${lastWeekSales[0].year}-${lastWeekSales[0].monthName}-01`);
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 6);
+    const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const monthIndex = monthNames.indexOf(lastWeekSales[0].monthName) + 1;
+    const year = parseInt(lastWeekSales[0].year);
+    const startDate = new Date(year, monthIndex - 1, 1);
+    const endDate = new Date(year, monthIndex, 0);
     return {
       totalSales: totalSales,
       weekDates: {
@@ -225,7 +227,21 @@ export class DefaultComponent implements OnInit {
       }];
     this.supplierBarChart.xaxis = {
       categories: categories,
-    }
+    };
+    this.supplierBarChart.yaxis = {
+      labels: {
+        formatter: function (value) {
+          const valorData = parseFloat(value.toFixed(2));
+          return valorData.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+        }
+      }
+    };
+    this.supplierBarChart.dataLabels = {
+      formatter: function (value) {
+        const valorData = parseFloat(value.toFixed(2));
+        return valorData.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+      }
+    };
   }
 
   /**
