@@ -55,6 +55,8 @@ export class TablePaginationComponent implements OnInit {
   totalProd = 0.0;
   totalEnvios = 0;
   discount = 0;
+  subtotal = 0.0;
+  iva = 0.0;
   total = 0.0;
 
   constructor(
@@ -212,16 +214,18 @@ export class TablePaginationComponent implements OnInit {
         const warehouse = this.data.warehouses[idW];
         for (const idP of Object.keys(warehouse.productShipments)) {
           const prod = warehouse.productShipments[idP];
-          this.totalProd += (prod.precio * prod.cantidad);
+          this.totalProd += (prod.precio * prod.cantidad / 1.16);
           this.productos.push(prod);
         }
         for (const idE of Object.keys(warehouse.shipments)) {
           const ship = warehouse.shipments[idE];
-          this.totalEnvios += ship.costo;
+          this.totalEnvios += (ship.costo / 1.16);
         }
       }
       this.discount = this.data.discount;
-      this.total = this.totalProd + this.totalEnvios - this.discount;
+      this.subtotal = this.totalProd + this.totalEnvios - this.discount;
+      this.iva = this.subtotal * 0.16;
+      this.total = this.subtotal + this.iva;
       this.modalService.open(content, { size: 'lg', centered: true });
     } else if (this.resultData.listKey === 'listOrdersCt') {
       if (this.data.respuestaCT) {
