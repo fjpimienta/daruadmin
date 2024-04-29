@@ -222,14 +222,14 @@
                   <tr *ngFor="let producto of productos">
                     <td>{{producto.name}}</td>
                     <td class="text-center">{{producto.cantidad}}</td>
-                    <td class="text-right custom-class">{{producto.precio.toFixed(2).toString()}}</td>
-                    <td class="text-right custom-class">{{producto.total.toFixed(2).toString()}}</td>
+                    <td class="text-right custom-class">{{(producto.precio / 1.16).toFixed(2).toString()}}</td>
+                    <td class="text-right custom-class">{{(producto.total / 1.16).toFixed(2).toString()}}</td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr>
                     <td colspan="2">&nbsp;</td>
-                    <td><strong>Subtotal:</strong></td>
+                    <td><strong>Costo:</strong></td>
                     <td class="text-right">$ {{totalProd.toFixed(2).toString()}}</td>
                   </tr>
                   <tr>
@@ -241,6 +241,16 @@
                     <td colspan="2">&nbsp;</td>
                     <td><strong>Descuento:</strong></td>
                     <td class="text-right">$ {{discount.toFixed(2).toString()}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td><strong>Subtotal:</strong></td>
+                    <td class="text-right">$ {{subtotal.toFixed(2).toString()}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2">&nbsp;</td>
+                    <td><strong>IVA 16%:</strong></td>
+                    <td class="text-right">$ {{iva.toFixed(2).toString()}}</td>
                   </tr>
                   <tr>
                     <td colspan="2">&nbsp;</td>
