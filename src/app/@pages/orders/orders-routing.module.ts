@@ -9,6 +9,10 @@ const routes: Routes = [
   {
     path: 'ct',
     loadChildren: () => import('./ct/ct.module').then(m => m.CtModule)
+  },
+  {
+    path: 'syscom',
+    loadChildren: () => import('./syscom/syscom.module').then(m => m.SyscomModule)
   }
 ];
 

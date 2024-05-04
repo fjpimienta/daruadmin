@@ -49,3 +49,19 @@ export const PRODUCTSSYSCOM_FRAGMENT = gql`
     }
   }
 `;
+
+export const FACTURASSYSCOM_FRAGMENT = gql`
+  fragment ListFacturaSyscomObject on ListFacturaSyscom {
+    folio_factura
+    fecha
+    total
+    texto
+    moneda
+    pago_aplicado
+    estatus_fiscal
+    estatus
+    plazo
+    folio_pedido
+    uuid
+  }
+`;
