@@ -51,6 +51,11 @@ export const MENU: MenuItem[] = [
         label: 'CT',
         link: '/orders/ct/list',
         parentId: 4
+      },{
+        id: 2,
+        label: 'Syscom',
+        link: '/orders/syscom/list',
+        parentId: 4
       },
     ]
   },
