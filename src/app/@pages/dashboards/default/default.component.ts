@@ -220,11 +220,19 @@ export class DefaultComponent implements OnInit {
       data.push(totalAmountMonth);
       categories.push(monthData.monthName);
     });
-    this.supplierBarChart.series =
-      [{
-        name: 'Ventas del Mes',
-        data: data
-      }];
+
+    const monthNamesInOrder = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+    categories.sort((a, b) => {
+      return monthNamesInOrder.indexOf(a) - monthNamesInOrder.indexOf(b);
+    });
+
+    this.supplierBarChart.series = [{
+      name: 'Ventas del Mes',
+      data: data
+    }];
     this.supplierBarChart.xaxis = {
       categories: categories,
     };
