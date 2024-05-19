@@ -438,13 +438,14 @@ export class ImportarComponent implements OnInit {
     } else {
       if (this.catalogValues.length > 0 || this.supplier.slug === 'ct' ||
         this.supplier.slug === 'ingram' || this.supplier.slug === 'exel' ||
-        this.supplier.slug === 'syscom') {
+        this.supplier.slug === 'syscom' || this.supplier.slug === 'daisytek') {
         loadData('Importando los productos', 'Esperar la carga de los productos.');
         const productos = await this.getProducts(this.supplier, this.apiSelect, this.catalogValues);
+        console.log('productos: ', productos);
         if (productos && !productos.status) {
           basicAlert(TYPE_ALERT.ERROR, productos.message);
         }
-        if (productos.productos.length > 0) {
+        if (productos && productos.productos && productos.productos.length > 0) {
           this.habilitaGuardar = true;
           this.dataExport = [];
           // Setear dataExport
@@ -589,6 +590,22 @@ export class ImportarComponent implements OnInit {
           status: true,
           message: 'Productos listos para agregar.',
           productos: productsSyscom
+        }
+      case 'daisytek':
+        const productosDaisytek = await this.externalAuthService.getProductsDaisytek();
+        console.log('productosDaisytek: ', productosDaisytek);
+        if (productosDaisytek && !productosDaisytek.status) {
+          return await {
+            status: productosDaisytek.status,
+            message: productosDaisytek.message,
+            productos: []
+          }
+        }
+        const productsDaisytek = productosDaisytek.listProductsDaisytek;
+        return await {
+          status: true,
+          message: 'Productos listos para agregar.',
+          productos: productsDaisytek
         }
       default:
         break;
