@@ -12,6 +12,7 @@ import { Catalog } from '@core/models/catalog.models';
 import { PRODUCTOSCT_LIST_QUERY, PRODUCTSCT_JSON_QUERY, PRODUCTSCT_XML_QUERY, STATUS_ORDER_CT } from '@graphql/operations/query/suppliers/ct';
 import { CATALOGSINGRAM_ONE_QUERY, CATALOGSINGRAM_LIST_QUERY, PRODUCTOSINGRAM_LIST_QUERY } from '@graphql/operations/query/suppliers/ingram';
 import { PRODUCTOSSYSCOM_LIST_QUERY } from '@graphql/operations/query/suppliers/syscom';
+import { PRODUCTOSDAISYTEK_LIST_QUERY } from '@graphql/operations/query/suppliers/daisytek';
 
 declare const require;
 const xml2js = require('xml2js');
@@ -693,6 +694,19 @@ export class ExternalAuthService extends ApiService {
       this.get(PRODUCTOSSYSCOM_LIST_QUERY, {}, {}).subscribe(
         (result: any) => {
           resolve(result.listProductsSyscom);
+        },
+        (error: any) => {
+          reject(error);
+        });
+    });
+  }
+  //#endregion
+  //#region Daisytek
+  async getProductsDaisytek(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.get(PRODUCTOSDAISYTEK_LIST_QUERY, {}, {}).subscribe(
+        (result: any) => {
+          resolve(result.listProductsDaisytek);
         },
         (error: any) => {
           reject(error);
