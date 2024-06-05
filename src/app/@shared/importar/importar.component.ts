@@ -570,7 +570,7 @@ export class ImportarComponent implements OnInit {
             productos: []
           }
         }
-        const productsIngram = productosIngram.listProductsIngram;
+        const productsIngram = productosIngram.listProductsBDI;
         return await {
           status: true,
           message: 'Productos listos para agregar.',

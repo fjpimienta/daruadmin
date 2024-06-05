@@ -658,7 +658,7 @@ export class ExternalAuthService extends ApiService {
     return new Promise<any>((resolve, reject) => {
       this.get(PRODUCTOSINGRAM_LIST_QUERY, {}, {}).subscribe(
         (result: any) => {
-          resolve(result.listProductsIngram);
+          resolve(result.listProductsBDI);
         },
         (error: any) => {
           reject(error);
