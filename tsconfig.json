@@ -22,10 +22,10 @@
         "src/app/@shared/*"
       ],
       "@pages/*": [
-        "src/app/pages/*"
+        "src/app/@pages/*"
       ],
       "@uploads/*": [
-        "src/assets/uploads/*"
+        "src/assets/@uploads/*"
       ]
     },
     "outDir": "./dist/out-tsc",
@@ -35,6 +35,7 @@
     "experimentalDecorators": true,
     "resolveJsonModule": true,
     "module": "es2020",
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
