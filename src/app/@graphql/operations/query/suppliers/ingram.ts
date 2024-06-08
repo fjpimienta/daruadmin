@@ -3,11 +3,11 @@ import { CATALOGINGRAM_FRAGMENT, PRODUCTSINGRAM_FRAGMENT } from '@graphql/operat
 import { PRODUCT_FRAGMENT } from '@graphql/operations/fragment/product';
 
 export const PRODUCTOSINGRAM_LIST_QUERY = gql`
-  query listProductsIngram {
-    listProductsIngram {
+  query listProductsBDI {
+    listProductsBDI {
       status
       message
-      listProductsIngram {
+      listProductsBDI {
         ...ProductObject
       }
     }
@@ -16,11 +16,11 @@ export const PRODUCTOSINGRAM_LIST_QUERY = gql`
 `;
 
 export const PRODUCTSINGRAM_LIST_QUERY = gql`
-  query pricesIngram {
-    pricesIngram {
+  query pricesBDI {
+    pricesBDI {
       status
       message
-      pricesIngram {
+      pricesBDI {
         ...ProductsIngramObject
       }
     }
