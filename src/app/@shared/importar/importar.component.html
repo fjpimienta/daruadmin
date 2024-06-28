@@ -47,36 +47,36 @@
       <div class="card">
         <div class="card-body">
           <div class="row">
-            <div class="col-lg-2">
-              <h5>Proveedor</h5>
-              <select class="form-select" [(ngModel)]="supplier" (ngModelChange)="onSelectSupplier()">
+            <div class="col-lg-1">
+              <label for="supplier"><h5>Proveedor</h5></label>
+              <select class="form-select" id="supplier" [(ngModel)]="supplier" (ngModelChange)="onSelectSupplier()">
                 <option *ngFor="let proveedor of suppliers" [ngValue]="proveedor">
                   {{ proveedor.name }}
                 </option>
               </select>
             </div>
             <div class="col-lg-4">
-              <h5>API</h5>
+              <label for="apiName"><h5>API</h5></label>
               <input type="text" class="form-control" id="apiName" [(ngModel)]="apiName" [attr.disabled]="true">
             </div>
             <div class="col-lg-3">
-              <h5>Búsqueda</h5>
-              <select class="form-select" [(ngModel)]="apiSelect" (ngModelChange)="onSelectApi()">
+              <label for="apiSelect"><h5>Búsqueda</h5></label>
+              <select class="form-select" id="apiSelect" [(ngModel)]="apiSelect" (ngModelChange)="onSelectApi()">
                 <option *ngFor="let apiSelect of apisFilter" [ngValue]="apiSelect">
                   {{ apiSelect.operation + '/' + apiSelect.suboperation }}
                 </option>
               </select>
             </div>
             <div class="col-lg-1">
-              <h5>Valor</h5>
-              <select class="form-select" [(ngModel)]="valorSearch">
+              <label for="valorSearch"><h5>Valor</h5></label>
+              <select class="form-select" id="valorSearch" [(ngModel)]="valorSearch">
                 <option *ngFor="let valorSearch of catalogValues" [ngValue]="valorSearch">
                   {{ valorSearch.name }}
                 </option>
               </select>
             </div>
             <div class="col-lg-1">
-              <h5>Minimo</h5>
+              <label for="stockMinimo"><h5>Minimo</h5></label>
               <input type="number" class="form-control" id="stockMinimo" [(ngModel)]="stockMinimo" min="1"
                 pattern="^[0-9]+">
             </div>
@@ -84,6 +84,11 @@
               <h5>&nbsp;</h5>
               <button type="button" class="btn btn-primary" (click)='onEjecutarAPI()'
                 [disabled]="!habilitaEjecutar">Ejecutar</button>
+            </div>
+            <div class="col-lg-1">
+              <h5>&nbsp;</h5>
+              <button type="button" class="btn btn-primary" (click)='onEjecutarImage()'
+                [disabled]="!habilitaEjecutar">Imagenes</button>
             </div>
           </div>
         </div>

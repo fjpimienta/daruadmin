@@ -81,3 +81,16 @@ query {
    }
 }
 `;
+
+export const ADD_IMAGES = gql`
+  query icecatProductLocal($brandIcecat: String, $productIcecat: String) {
+    addImages(supplierId: $supplierId) {
+        status
+        message
+        products {
+          ...ProductObject
+        }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
