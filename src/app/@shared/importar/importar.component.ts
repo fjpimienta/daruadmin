@@ -7,20 +7,21 @@ import { IAlmacen, IAlmacenes, IProductoCt, IPromocion } from '@core/interfaces/
 import { AddCatalog, Catalog, SupplierCat } from '@core/models/catalog.models';
 import {
   AddProduct, Brands, Categorys, Picture, Product, UnidadDeMedida, BranchOffices,
-  SupplierProd, ProductExport, Descuentos, Promociones, PromocionBranchOffice, Vigente, Especificacion
+  SupplierProd, ProductExport, Descuentos, Promociones, Especificacion
 } from '@core/models/product.models';
-import { AvailabilityByWarehouse } from '@core/models/productingram.models';
 import { BrandsService } from '@core/services/brand.service';
 import { CategoriesService } from '@core/services/categorie.service';
 import { ConfigsService } from '@core/services/config.service';
 import { ExternalAuthService } from '@core/services/external-auth.service';
 import { GroupsService } from '@core/services/group.service';
+import { ProductsService } from '@core/services/products.service';
 import { SuppliersService } from '@core/services/supplier.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { closeAlert, infoEventAlert, loadData } from '@shared/alert/alerts';
 import { basicAlert } from '@shared/alert/toasts';
 import { TYPE_ALERT } from '@shared/alert/values.config';
 import slugify from 'slugify';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-importar',
@@ -88,7 +89,8 @@ export class ImportarComponent implements OnInit {
     private categoriesService: CategoriesService,
     private groupsService: GroupsService,
     private httpClient: HttpClient,
-    private configsService: ConfigsService
+    private configsService: ConfigsService,
+    private productsService: ProductsService
   ) { }
 
   // Define requests
@@ -476,6 +478,28 @@ export class ImportarComponent implements OnInit {
       } else {
         basicAlert(TYPE_ALERT.WARNING, 'No existen elementos para buscar.');
         return [];
+      }
+    }
+  }
+
+  async onEjecutarImage() {
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Esta acción ejecutará la carga de imágenes.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, ejecutar!',
+      cancelButtonText: 'No, cancelar!'
+    });
+
+    if (result.isConfirmed) {
+      const resImagenes = await this.productsService.addImagesAll(this.supplier.slug);
+      if (resImagenes.status) {
+        basicAlert(TYPE_ALERT.SUCCESS, 'SI');
+      } else {
+        basicAlert(TYPE_ALERT.WARNING, resImagenes.message);
       }
     }
   }

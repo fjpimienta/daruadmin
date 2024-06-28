@@ -108,7 +108,8 @@
               <div class="col-3">
                 <label for="featured">Oferta</label>
                 <div class="form-check form-switch form-switch-lg mb-3">
-                  <input class="form-check-input" type="checkbox" id="featured" formControlName="featured" (click)="onFeatured()">
+                  <input class="form-check-input" type="checkbox" id="featured" formControlName="featured"
+                    (click)="onFeatured()">
                   <label class="form-check-label" for="featured"></label>
                 </div>
               </div>
@@ -126,7 +127,7 @@
                 </div>
               </div>
               <div class="col-4">
-                <label class="mt-3">Marca</label>
+                <label for="brandsSelected" class="mt-3">Marca</label>
                 <input *ngIf="editMode" type="text" class="form-control" id="brandsSelected"
                   formControlName="brandsSelected" [(ngModel)]="brandsSelected" [attr.disabled]="true">
                 <ng-select *ngIf="!editMode" [items]="brands" bindLabel="description" bindValue="slug"
@@ -134,14 +135,14 @@
                 </ng-select>
               </div>
               <div class="col-4">
-                <label class="mt-3">Categoría</label>
+                <label for="categorysSelected" class="mt-3">Categoría</label>
                 <input *ngIf="editMode" type="text" class="form-control" id="categorysSelected"
                   formControlName="categorysSelected" [(ngModel)]="categorysSelected" [attr.disabled]="true">
                 <ng-select *ngIf="!editMode" [items]="categorys" bindLabel="description" bindValue="slug"
                   [multiple]="true" formControlName="categorys" [(ngModel)]="categorysSelected"></ng-select>
               </div>
               <div class="col-4">
-                <label class="mt-3">SubCategoría</label>
+                <label for="subCategorysSelected" class="mt-3">SubCategoría</label>
                 <input *ngIf="editMode" type="text" class="form-control" id="subCategorysSelected"
                   formControlName="subCategorysSelected" [(ngModel)]="subCategorysSelected" [attr.disabled]="true">
                 <ng-select *ngIf="!editMode" [items]="subCategorys" bindLabel="description" bindValue="slug"
