@@ -120,9 +120,9 @@ export class ProductsService extends ApiService {
 
   async addImagesAll(supplierId: String): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      this.get(ADD_IMAGES, { supplierId }, {}).subscribe(
+      this.set(ADD_IMAGES, { supplierId }, {}).subscribe(
         (result: any) => {
-          resolve(result.products);
+          resolve(result.addImages);
         },
         (error: any) => {
           reject(error);

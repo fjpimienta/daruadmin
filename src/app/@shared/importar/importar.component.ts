@@ -495,9 +495,10 @@ export class ImportarComponent implements OnInit {
     });
 
     if (result.isConfirmed) {
+      loadData('Cargando imágenes...', 'Espera mientras se guardas las imágenes');
       const resImagenes = await this.productsService.addImagesAll(this.supplier.slug);
       if (resImagenes.status) {
-        basicAlert(TYPE_ALERT.SUCCESS, 'SI');
+        basicAlert(TYPE_ALERT.SUCCESS, resImagenes.message);
       } else {
         basicAlert(TYPE_ALERT.WARNING, resImagenes.message);
       }
