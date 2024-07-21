@@ -38,6 +38,7 @@ export class Product extends ProductExport {
   unidadDeMedida?: UnidadDeMedida;
   active: boolean;
   especificaciones: Especificacion[];
+  sheetJson: String;
 }
 
 export class Especificacion {

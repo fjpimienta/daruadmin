@@ -119,5 +119,6 @@ export const PRODUCT_FRAGMENT = gql`
       tipo
       valor
     }
+    sheetJson
   }
 `;
