@@ -33,6 +33,7 @@ export interface IProduct {
   descuentos: IDescuentos;
   promociones: IPromociones;
   especificaciones: IEspecificaciones[];
+  sheetJson: string;
 }
 
 export interface IEspecificaciones {

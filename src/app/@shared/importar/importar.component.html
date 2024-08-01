@@ -48,7 +48,9 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-1">
-              <label for="supplier"><h5>Proveedor</h5></label>
+              <label for="supplier">
+                <h5>Proveedor</h5>
+              </label>
               <select class="form-select" id="supplier" [(ngModel)]="supplier" (ngModelChange)="onSelectSupplier()">
                 <option *ngFor="let proveedor of suppliers" [ngValue]="proveedor">
                   {{ proveedor.name }}
@@ -56,11 +58,15 @@
               </select>
             </div>
             <div class="col-lg-4">
-              <label for="apiName"><h5>API</h5></label>
+              <label for="apiName">
+                <h5>API</h5>
+              </label>
               <input type="text" class="form-control" id="apiName" [(ngModel)]="apiName" [attr.disabled]="true">
             </div>
             <div class="col-lg-3">
-              <label for="apiSelect"><h5>Búsqueda</h5></label>
+              <label for="apiSelect">
+                <h5>Búsqueda</h5>
+              </label>
               <select class="form-select" id="apiSelect" [(ngModel)]="apiSelect" (ngModelChange)="onSelectApi()">
                 <option *ngFor="let apiSelect of apisFilter" [ngValue]="apiSelect">
                   {{ apiSelect.operation + '/' + apiSelect.suboperation }}
@@ -68,7 +74,9 @@
               </select>
             </div>
             <div class="col-lg-1">
-              <label for="valorSearch"><h5>Valor</h5></label>
+              <label for="valorSearch">
+                <h5>Valor</h5>
+              </label>
               <select class="form-select" id="valorSearch" [(ngModel)]="valorSearch">
                 <option *ngFor="let valorSearch of catalogValues" [ngValue]="valorSearch">
                   {{ valorSearch.name }}
@@ -76,19 +84,31 @@
               </select>
             </div>
             <div class="col-lg-1">
-              <label for="stockMinimo"><h5>Minimo</h5></label>
+              <label for="stockMinimo">
+                <h5>Minimo</h5>
+              </label>
               <input type="number" class="form-control" id="stockMinimo" [(ngModel)]="stockMinimo" min="1"
                 pattern="^[0-9]+">
             </div>
-            <div class="col-lg-1">
+            <div class="col-lg-2 btn-container">
               <h5>&nbsp;</h5>
-              <button type="button" class="btn btn-primary" (click)='onEjecutarAPI()'
-                [disabled]="!habilitaEjecutar">Ejecutar</button>
-            </div>
-            <div class="col-lg-1">
+              <button type="button" class="btn btn-primary" (click)='onEjecutarAPI()' [disabled]="!habilitaEjecutar"
+                aria-label="Ejecutar" title="Ejecutar">
+                <i class="fas fa-play" title="Ejecutar"></i></button>
+              <!-- </div>
+            <div class="col-lg-1"> -->
               <h5>&nbsp;</h5>
-              <button type="button" class="btn btn-primary" (click)='onEjecutarImage()'
-                [disabled]="!habilitaEjecutar">Imagenes</button>
+              <button type="button" class="btn btn-primary" (click)='onEjecutarImage()' [disabled]="!habilitaEjecutar"
+                aria-label="Ejecutar imagen" title="Ejecutar imagen">
+                <i class="fas fa-file-image"></i>
+              </button>
+              <!-- </div>
+            <div class="col-lg-1"> -->
+              <h5>&nbsp;</h5>
+              <button type="button" class="btn btn-primary" (click)='onEjecutarJson()' [disabled]="!habilitaEjecutar"
+                aria-label="Ejecutar JSON" title="Ejecutar JSON">
+                <i class="fas fa-file-code"></i>
+              </button>
             </div>
           </div>
         </div>

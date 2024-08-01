@@ -184,7 +184,8 @@ export class ProductsComponent implements OnInit {
       suppliersProd: null,
       descuentos: null,
       promociones: null,
-      especificaciones: []
+      especificaciones: [],
+      sheetJson: ''
     };
   }
 
