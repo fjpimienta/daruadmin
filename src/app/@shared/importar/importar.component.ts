@@ -505,6 +505,29 @@ export class ImportarComponent implements OnInit {
     }
   }
 
+  async onEjecutarJson() {
+    const result = await Swal.fire({
+      title: '¿Estás seguro?',
+      text: "Esta acción ejecutará la carga de jsons.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, ejecutar!',
+      cancelButtonText: 'No, cancelar!'
+    });
+
+    if (result.isConfirmed) {
+      loadData('Cargando jsons...', 'Espera mientras se guardas los jsons');
+      const resJsons = await this.productsService.addJsosAll(this.supplier.slug);
+      if (resJsons.status) {
+        basicAlert(TYPE_ALERT.SUCCESS, resJsons.message);
+      } else {
+        basicAlert(TYPE_ALERT.WARNING, resJsons.message);
+      }
+    }
+  }
+
   //#endregion
 
   async getCatalogSupplier(supplier: string, apiSelect: IApis, forCatalog: boolean = false): Promise<Catalog[]> {

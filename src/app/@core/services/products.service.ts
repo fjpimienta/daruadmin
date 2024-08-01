@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ADD_PRODUCT, ADD_PRODUCT_LIST, BLOCK_PRODUCT, UPDATE_PRODUCT } from '@graphql/operations/mutation/product';
-import { ADD_IMAGES, PRODUCTS_LIST_QUERY, PRODUCT_FIELD_QUERY, PRODUCT_ICECAT_QUERY, PRODUCT_ID_QUERY, PRODUCT_QUERY } from '@graphql/operations/query/product';
+import { ADD_IMAGES, ADD_JSONS, PRODUCTS_LIST_QUERY, PRODUCT_FIELD_QUERY, PRODUCT_ICECAT_QUERY, PRODUCT_ID_QUERY, PRODUCT_QUERY } from '@graphql/operations/query/product';
 import { ApiService } from '@graphql/services/api.service';
 import { Apollo } from 'apollo-angular';
 import { map } from 'rxjs/operators';
@@ -123,6 +123,18 @@ export class ProductsService extends ApiService {
       this.set(ADD_IMAGES, { supplierId }, {}).subscribe(
         (result: any) => {
           resolve(result.addImages);
+        },
+        (error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  async addJsosAll(supplierId: String): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.set(ADD_JSONS, { supplierId }, {}).subscribe(
+        (result: any) => {
+          resolve(result.addJsons);
         },
         (error: any) => {
           reject(error);

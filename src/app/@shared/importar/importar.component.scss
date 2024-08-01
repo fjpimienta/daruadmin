@@ -8,3 +8,9 @@ table {
 input[type=number] {
   text-align:right;
 }
+
+.btn-container {
+  display: flex;
+  align-items: flex-end; /* Alinea los elementos al final verticalmente */
+  gap: 10px; /* Espacio entre los botones */
+}

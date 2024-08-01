@@ -94,3 +94,16 @@ export const ADD_IMAGES = gql`
   }
   ${PRODUCT_FRAGMENT}
 `;
+
+export const ADD_JSONS = gql`
+  mutation addJsons($supplierId: String) {
+    addJsons(supplierId: $supplierId) {
+        status
+        message
+        products {
+          ...ProductObject
+        }
+    }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
