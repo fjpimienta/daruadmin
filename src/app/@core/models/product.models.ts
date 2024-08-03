@@ -181,5 +181,10 @@ export class ProductExportInterno {
   TIPO_DE_CAMBIO: number;
   EXISTENCIA: number;
   SKU: string;
+  NUMERO_PARTE: string;
   PROVEEDOR: string;
+  JSON: string;
+  PICTURE1: string;
+  PICTURE2: string;
+  PICTURE3: string;
 }

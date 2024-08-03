@@ -233,7 +233,12 @@ export class ProductsComponent implements OnInit {
       newItemExport.TIPO_DE_CAMBIO = item.exchangeRate;
       newItemExport.EXISTENCIA = item.stock;
       newItemExport.SKU = item.sku;
+      newItemExport.NUMERO_PARTE = item.partnumber;
       newItemExport.PROVEEDOR = item.suppliersProd.idProveedor;
+      newItemExport.JSON = item.sheetJson;
+      newItemExport.PICTURE1 = item.pictures[0] ? item.pictures[0].url : '';
+      newItemExport.PICTURE2 = item.pictures[1] ? item.pictures[1].url : '';
+      newItemExport.PICTURE3 = item.pictures[2] ? item.pictures[2].url : '';
       this.dataExports.push(newItemExport);
     });
     this.exportToCSV();
