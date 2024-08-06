@@ -224,6 +224,7 @@ export class ProductsComponent implements OnInit {
       newItemExport.ID = item.id;
       newItemExport.CON_DESCUENTO = item.featured;
       newItemExport.NOMBRE_DEL_PRODUCTO = item.name;
+      newItemExport.MONEDA = item.suppliersProd.moneda;
       newItemExport.PRECIO_VENTA = item.price;
       newItemExport.PRECIO_VENTA_DESCUENTO = item.sale_price;
       newItemExport.PRECIO_COMPRA = item.suppliersProd.price;

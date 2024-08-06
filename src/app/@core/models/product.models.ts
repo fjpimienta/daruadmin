@@ -172,6 +172,7 @@ export class ProductExportInterno {
   ID: number;
   CON_DESCUENTO: boolean;
   NOMBRE_DEL_PRODUCTO: string;
+  MONEDA: number;
   PRECIO_VENTA: number;
   PRECIO_VENTA_DESCUENTO: number;
   PRECIO_COMPRA: number;
