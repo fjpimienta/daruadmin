@@ -440,7 +440,8 @@ export class ImportarComponent implements OnInit {
     } else {
       if (this.catalogValues.length > 0 || this.supplier.slug === 'ct' ||
         this.supplier.slug === 'ingram' || this.supplier.slug === 'exel' ||
-        this.supplier.slug === 'syscom' || this.supplier.slug === 'daisytek') {
+        this.supplier.slug === 'syscom' || this.supplier.slug === 'daisytek' ||
+        this.supplier.slug === 'inttelec') {
         loadData('Importando los productos', 'Esperar la carga de los productos.');
         const productos = await this.getProducts(this.supplier, this.apiSelect, this.catalogValues);
         console.log('productos: ', productos);
@@ -654,6 +655,22 @@ export class ImportarComponent implements OnInit {
           status: true,
           message: 'Productos listos para agregar.',
           productos: productsDaisytek
+        }
+      case 'inttelec':
+        const productosInttelec = await this.externalAuthService.getProductsInttelec();
+        console.log('productosInttelec: ', productosInttelec);
+        if (productosInttelec && !productosInttelec.status) {
+          return await {
+            status: productosInttelec.status,
+            message: productosInttelec.message,
+            productos: []
+          }
+        }
+        const productsInttelec = productosInttelec.listProductsInttelec;
+        return await {
+          status: true,
+          message: 'Productos listos para agregar.',
+          productos: productsInttelec
         }
       default:
         break;
