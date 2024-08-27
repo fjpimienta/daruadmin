@@ -13,6 +13,7 @@ import { PRODUCTOSCT_LIST_QUERY, PRODUCTSCT_JSON_QUERY, PRODUCTSCT_XML_QUERY, ST
 import { CATALOGSINGRAM_ONE_QUERY, CATALOGSINGRAM_LIST_QUERY, PRODUCTOSINGRAM_LIST_QUERY } from '@graphql/operations/query/suppliers/ingram';
 import { PRODUCTOSSYSCOM_LIST_QUERY } from '@graphql/operations/query/suppliers/syscom';
 import { PRODUCTOSDAISYTEK_LIST_QUERY } from '@graphql/operations/query/suppliers/daisytek';
+import { PRODUCTOSINTTELEC_LIST_QUERY } from '@graphql/operations/query/suppliers/inttelec';
 
 declare const require;
 const xml2js = require('xml2js');
@@ -714,4 +715,18 @@ export class ExternalAuthService extends ApiService {
     });
   }
   //#endregion
+
+    //#region Inttelec
+    async getProductsInttelec(): Promise<any> {
+      return new Promise<any>((resolve, reject) => {
+        this.get(PRODUCTOSINTTELEC_LIST_QUERY, {}, {}).subscribe(
+          (result: any) => {
+            resolve(result.listProductsInttelec);
+          },
+          (error: any) => {
+            reject(error);
+          });
+      });
+    }
+    //#endregion
 }
