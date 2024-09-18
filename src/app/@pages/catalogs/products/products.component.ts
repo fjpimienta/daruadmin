@@ -216,7 +216,8 @@ export class ProductsComponent implements OnInit {
       include: this.include,
       active: this.filterActiveValues,
       filterName: '',
-      role: ''
+      role: '',
+      withImages: false
     };
     const productos = await this.productsService.getProducts(1, 10000);
     this.dataExports = [];

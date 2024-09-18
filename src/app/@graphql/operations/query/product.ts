@@ -4,8 +4,10 @@ import { RESULT_INFO_FRAGMENT } from '../fragment/result-info';
 import { PRODUCT_ICECAT_FRAGMENT } from '../fragment/productIcecat';
 
 export const PRODUCTS_LIST_QUERY = gql`
-  query productList($page: Int, $itemsPage: Int, $active: ActiveFilterEnum, $filterName: String) {
-    products(page: $page, itemsPage: $itemsPage, active: $active, filterName: $filterName) {
+  query productList($page: Int, $itemsPage: Int, $active: ActiveFilterEnum, $filterName: String,
+    $withImages: Boolean) {
+    products(page: $page, itemsPage: $itemsPage, active: $active, filterName: $filterName,
+      withImages: $withImages) {
       info {
         ...ResultInfoObject
       }
