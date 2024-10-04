@@ -219,7 +219,7 @@ export class ProductsComponent implements OnInit {
       role: '',
       withImages: false
     };
-    const productos = await this.productsService.getProducts(1, 10000);
+    const productos = await this.productsService.getProducts(1, 10000, ACTIVE_FILTERS.ALL, false, true);
     this.dataExports = [];
     productos.products.forEach(item => {
       const newItemExport = new ProductExportInterno();
