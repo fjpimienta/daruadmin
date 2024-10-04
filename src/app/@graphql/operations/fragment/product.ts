@@ -122,3 +122,42 @@ export const PRODUCT_FRAGMENT = gql`
     sheetJson
   }
 `;
+
+export const PRODUCT_ADMIN_FRAGMENT = gql`
+  fragment ProductObjectAdmin on Product {
+    id
+    name
+    price
+    sale_price
+    exchangeRate
+    stock
+    top
+    featured
+    partnumber
+    sku
+    brand
+    pictures {
+      width
+      height
+      url
+      pivot {
+        related_id
+        upload_file_id
+      }
+    }
+    active
+    suppliersProd {
+      idProveedor
+      codigo
+      price
+      sale_price
+      moneda
+      branchOffices {
+        name
+        estado
+        cantidad
+      }
+    }
+    sheetJson
+  }
+`;

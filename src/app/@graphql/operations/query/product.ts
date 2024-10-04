@@ -1,24 +1,26 @@
 import gql from 'graphql-tag';
-import { PRODUCT_FRAGMENT } from '../fragment/product';
+import { PRODUCT_ADMIN_FRAGMENT, PRODUCT_FRAGMENT } from '../fragment/product';
 import { RESULT_INFO_FRAGMENT } from '../fragment/result-info';
 import { PRODUCT_ICECAT_FRAGMENT } from '../fragment/productIcecat';
 
 export const PRODUCTS_LIST_QUERY = gql`
   query productList($page: Int, $itemsPage: Int, $active: ActiveFilterEnum, $filterName: String,
-    $withImages: Boolean) {
+    $withImages: Boolean, $isAdmin: Boolean!) {
     products(page: $page, itemsPage: $itemsPage, active: $active, filterName: $filterName,
-      withImages: $withImages) {
+      withImages: $withImages, isAdmin: $isAdmin) {
       info {
         ...ResultInfoObject
       }
       status
       message
       products {
-        ...ProductObject
+        ...ProductObject @skip(if: $isAdmin)
+        ...ProductObjectAdmin @include(if: $isAdmin)
       }
     }
   }
   ${PRODUCT_FRAGMENT}
+  ${PRODUCT_ADMIN_FRAGMENT}
   ${RESULT_INFO_FRAGMENT}
 `;
 
