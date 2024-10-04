@@ -67,11 +67,11 @@ export class ProductsService extends ApiService {
   }
 
   async getProducts(page: number = 1, itemsPage: number = 10, filterActiveValues: ACTIVE_FILTERS = ACTIVE_FILTERS.ACTIVE,
-    withImages: boolean = false
+    withImages: boolean = false, isAdmin: boolean = false
   ): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       this.get(PRODUCTS_LIST_QUERY, {
-        itemsPage, page, filterActiveValues, withImages
+        itemsPage, page, filterActiveValues, withImages, isAdmin
       }, {}).subscribe(
         (result: any) => {
           resolve(result.products);
