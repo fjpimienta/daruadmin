@@ -109,7 +109,8 @@ export class TablePaginationComponent implements OnInit {
       active: this.filterActiveValues,
       filterName: this.filterName,
       role: this.role,
-      withImages: this.withImages
+      withImages: this.withImages,
+      isAdmin: false
     };
 
     if (this.query) {
