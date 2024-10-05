@@ -5,7 +5,7 @@ import { PRODUCT_ICECAT_FRAGMENT } from '../fragment/productIcecat';
 
 export const PRODUCTS_LIST_QUERY = gql`
   query productList($page: Int, $itemsPage: Int, $active: ActiveFilterEnum, $filterName: String,
-    $withImages: Boolean, $isAdmin: Boolean) {
+    $withImages: Boolean, $isAdmin: Boolean!) {
     products(page: $page, itemsPage: $itemsPage, active: $active, filterName: $filterName,
       withImages: $withImages, isAdmin: $isAdmin) {
       info {
