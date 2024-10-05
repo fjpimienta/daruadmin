@@ -26,6 +26,7 @@ export class TablePaginationComponent implements OnInit {
   @Input() filterName = '';
   @Input() role = '';
   @Input() withImages = false;
+  @Input() isAdmin = true;
   // @Input() filterBranch = '0';
   // @Input() filtroProduct = false;
   @Input() onlySearch = false;
@@ -110,7 +111,7 @@ export class TablePaginationComponent implements OnInit {
       filterName: this.filterName,
       role: this.role,
       withImages: this.withImages,
-      isAdmin: false
+      isAdmin: this.isAdmin
     };
 
     if (this.query) {
