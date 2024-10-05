@@ -217,7 +217,8 @@ export class ProductsComponent implements OnInit {
       active: this.filterActiveValues,
       filterName: '',
       role: '',
-      withImages: false
+      withImages: false,
+      isAdmin: false
     };
     const productos = await this.productsService.getProducts(1, 10000, ACTIVE_FILTERS.ALL, false, true);
     this.dataExports = [];
