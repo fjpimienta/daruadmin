@@ -126,12 +126,18 @@ export const MENU: MenuItem[] = [
       },
       {
         id: 8,
+        label: 'Diccionario de Datos',
+        link: '/dictionary',
+        parentId: 6
+      },
+      {
+        id: 9,
         label: 'Clientes',
         link: '/clients',
         parentId: 6
       },
       {
-        id: 9,
+        id: 10,
         label: 'Cupones Bienvenida',
         link: '/welcomes',
         parentId: 6

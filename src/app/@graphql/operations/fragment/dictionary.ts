@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const DICTIONARY_FRAGMENT = gql`
-  fragment DictionaryObject on Brand {
+  fragment DictionaryObject on Dictionary {
     id
     orderHeader
     headerName
