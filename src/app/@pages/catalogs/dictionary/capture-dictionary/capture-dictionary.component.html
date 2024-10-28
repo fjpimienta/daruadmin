@@ -4,13 +4,15 @@
     <button type="button" class="btn-close" aria-hidden="true" (click)="onCloseModal()"></button>
   </div>
   <div class="modal-body">
-    <!-- <form (ngSubmit)="onSubmit()" #forma="ngForm"> -->
-      <h2>Catpura</h2>
-    <!-- </form> -->
+    <form (ngSubmit)="onSubmit()" #forma="ngForm">
+      <div class="container-fluid p-0">
+
+      </div>
+    </form>
   </div>
   <div class="modal-footer">
-    <!-- <button type="button" class="btn btn-light" (click)="onCloseModal()">Cancelar</button>
-    <button *ngIf="!onlyView" type="button" class="btn btn-primary" (click)="onSubmit()"
+    <button type="button" class="btn btn-light" (click)="onCloseModal()">Cancelar</button>
+    <!-- <button *ngIf="!onlyView" type="button" class="btn btn-primary" (click)="onSubmit()"
       [disabled]="!forma.valid">Grabar</button> -->
   </div>
 </ng-template>

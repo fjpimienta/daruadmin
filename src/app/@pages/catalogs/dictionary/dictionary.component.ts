@@ -27,6 +27,7 @@ export class DictionaryComponent implements OnInit {
   columns: Array<ITableColumns>;
   filterActiveValues: ACTIVE_FILTERS;
   mostrarBoton: boolean;
+  mostrarActivos: boolean = false;
   dictionary: IDictionary;
   editMode = false;
   nextId: string;
@@ -144,6 +145,23 @@ export class DictionaryComponent implements OnInit {
   private async updateForm(dictionary: IDictionary, editMode: boolean = true, onlyView: boolean = false) {
     this.editMode = editMode;
     this.modal.onOpenModal(dictionary, editMode, onlyView);
+  }
+
+  dictionaryBack(event) {
+    this.dictionary = event;
+    if (this.editMode) {                        // Si es un  para editar
+      this.updateCatalog(this.dictionary);
+    } else {                                    // Si es un usero nuevo
+      this.addCatalog(this.dictionary);
+    }
+  }
+
+  private addCatalog(dictionary: IDictionary) {
+    console.log('addCatalog/dictionary: ', dictionary);
+  }
+
+  private updateCatalog(dictionary: IDictionary) {
+    console.log('updateCatalog/dictionary: ', dictionary);
   }
 
   private async unblockForm(brand: any, unblock: boolean) {
