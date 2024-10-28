@@ -95,7 +95,6 @@ export class ImportarComponent implements OnInit {
 
   // Define requests
   private httpReq2$ = this.httpClient.get('assets/uploads/json/ct_almacenes.json');
-  private httpReq3$ = this.httpClient.get('assets/uploads/json/ingram_products.json');
 
   // convenience getter for easy access to form fields
   get f() { return this.importForm.controls; }

@@ -13,6 +13,11 @@ const routes: Routes = [
     data: { pageTitle: 'Cupones' }
   },
   {
+    path: 'dictionary',
+    loadChildren: () => import('./dictionary/dictionary.module').then(m => m.DictionaryModule),
+    data: { pageTitle: 'Diccionario de Datos' }
+  },
+  {
     path: 'brands',
     loadChildren: () => import('./brands/brands.module').then(m => m.BrandsModule),
     data: { pageTitle: 'Marcas' }

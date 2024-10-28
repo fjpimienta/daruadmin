@@ -18,6 +18,7 @@ import { FilemanagerComponent } from './filemanager/filemanager.component';
 import { CuponsComponent } from './catalogs/cupons/cupons.component';
 import { ClientsComponent } from './catalogs/clients/clients.component';
 import { WelcomesComponent } from './catalogs/welcomes/welcomes.component';
+import { DictionaryComponent } from './catalogs/dictionary/dictionary.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard' },
@@ -36,6 +37,10 @@ const routes: Routes = [
   },
   {
     path: 'models', component: ModelsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dictionary', component: DictionaryComponent,
     canActivate: [AuthGuard]
   },
   {
