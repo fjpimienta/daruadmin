@@ -24,6 +24,7 @@ export interface xIProductCt {
 }
 
 export interface IEspecificaciones {
+  agrupadoPor: string;
   tipo: string;
   valor: string;
 }

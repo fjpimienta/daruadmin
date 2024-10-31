@@ -24,6 +24,7 @@ export class xProductCt {
 }
 
 export class IEspecificaciones {
+  agrupadoPor: string;
   tipo: string;
   valor: string;
 }

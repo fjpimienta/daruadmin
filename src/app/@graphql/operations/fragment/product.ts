@@ -116,6 +116,7 @@ export const PRODUCT_FRAGMENT = gql`
       porciento
     }
     especificaciones {
+      agrupadoPor
       tipo
       valor
     }
