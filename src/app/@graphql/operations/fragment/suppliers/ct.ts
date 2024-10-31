@@ -93,6 +93,7 @@ export const PRODUCTSCT_FTP_FRAGMENT = gql`
       moneda
       tipoCambio
       especificaciones {
+        agrupadoPor
         tipo
         valor
       }

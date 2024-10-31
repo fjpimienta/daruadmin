@@ -42,6 +42,7 @@ export class Product extends ProductExport {
 }
 
 export class Especificacion {
+  agrupadoPor: string;
   tipo: string;
   valor: string;
 }
