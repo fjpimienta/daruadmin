@@ -1,55 +1,67 @@
 {
-  "/xl4.asmx" : {
+  "/xl4.asmx": {
     "target": "http://ws.exel.com.mx:8181",
     "secure": true,
     "changeOrigin": true
   },
-  "/oauth/oauth30/token" : {
+  "/oauth/oauth30/token": {
     "target": "https://api.ingrammicro.com:443/",
     "secure": true,
     "changeOrigin": true
   },
-  "/resellers/v6/catalog" : {
+  "/resellers/v6/catalog": {
     "target": "https://api.ingrammicro.com:443/sandbox/",
     "secure": true,
     "changeOrigin": true
   },
-  "/catalogo_clientes_xml/*" : {
+  "/catalogo_clientes_xml/*": {
     "target": "http://www.grupocva.com",
     "secure": true,
     "changeOrigin": true
   },
-  "/pedidos_web/*" : {
+  "/pedidos_web/*": {
     "target": "http://www.grupocva.com",
     "secure": true,
     "changeOrigin": true
   },
-  "/cliente/*" : {
+  "/cliente/*": {
     "target": "http://connect.ctonline.mx:3001/",
     "secure": true,
     "changeOrigin": true
   },
-  "/existencia/*" : {
+  "/existencia/*": {
     "target": "http://connect.ctonline.mx:3001/",
     "secure": true,
     "changeOrigin": true
   },
-  "/paqueteria/*" : {
+  "/paqueteria/*": {
     "target": "http://connect.ctonline.mx:3001/",
     "secure": true,
     "changeOrigin": true
   },
-  "/pedido/*" : {
+  "/pedido/*": {
     "target": "http://connect.ctonline.mx:3001/",
     "secure": true,
     "changeOrigin": true
   },
   "/upload": {
-    "target": "https://apidev.daru.mx:3002/upload",
-    "secure": true
+    "target": "https://apidaru.hosting3m.com:3002/upload",
+    "secure": true,
+    "timeout": 60000
   },
   "/graphql": {
-    "target": "https://apidev.daru.mx:3002/graphql",
-    "secure": true
+    "target": "https://apidaru.hosting3m.com:3002/graphql",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api/health-check": {
+    "target": "https://apidaru.hosting3m.com:3002/",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/health-check": "/health-check"
+    },
+    "timeout": 15000
   }
 }

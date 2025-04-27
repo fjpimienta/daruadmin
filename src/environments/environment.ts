@@ -1,10 +1,12 @@
 export const environment = {
   production: false,
-  backend: 'https://apidev.daru.mx:3002/graphql',
-  backendWs: 'wss://apidev.daru.mx:3002/graphql',
+  ignoreSSL: true, // Ignorar errores de SSL en desarrollo
+  sslLogInterval: 300000, // 5 minutos en milisegundos
+  backend: 'https://apidaru.hosting3m.com:3002/graphql',
+  backendWs: 'wss://apidaru.hosting3m.com:3002/graphql',
   stripePublicKey: 'pk_test_51JIL74J3AWJEzlXbrPLgiyb1RdjtNR4Raz49wGw3CsU8YMes5ZhSw6Z7Qx2TCabBD5gYcVyV4cJSwVJUXWTleF1O00XRREKbZk',
-  upload: 'https://apidev.daru.mx:3002/upload',
-  uploadsUrl: 'https://apidev.daru.mx:3002/uploads',
+  upload: 'https://apidaru.hosting3m.com:3002/upload',
+  uploadsUrl: 'https://apidaru.hosting3m.com:3002/uploads',
 
   defaultauth: 'fackbackend',
   firebaseConfig: {

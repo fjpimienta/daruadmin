@@ -21,6 +21,27 @@ DARU.MX es una plataforma de comercio electrónico (MarketPlace) especializada e
 - Autenticación JWT
 - Sistema de permisos basado en roles
 - Interfaz responsiva compatible con dispositivos móviles
+- Integración con Stripe para procesamiento de pagos
+
+## Configuración del Entorno
+
+El proyecto utiliza archivos de entorno para manejar diferentes configuraciones:
+
+```typescript
+// environment.ts (desarrollo)
+export const environment = {
+  production: false,
+  ignoreSSL: true, // Ignorar errores de SSL en desarrollo
+  sslLogInterval: 300000, // 5 minutos en milisegundos
+  backend: 'https://apidaru.hosting3m.com:3002/graphql',
+  backendWs: 'wss://apidaru.hosting3m.com:3002/graphql',
+  stripePublicKey: 'pk_test_...',
+  upload: 'https://apidaru.hosting3m.com:3002/upload',
+  uploadsUrl: 'https://apidaru.hosting3m.com:3002/uploads'
+};
+```
+
+Para producción, se utiliza `environment.prod.ts` con valores ajustados para el entorno de producción.
 
 ## Development server
 
@@ -32,7 +53,7 @@ Ejecuta `ng generate component component-name` para generar un nuevo componente.
 
 ## Build
 
-Ejecuta `ng build` para construir el proyecto. Los archivos de salida se almacenarán en el directorio `dist/`. Usa la bandera `--prod` para una compilación de producción.
+Ejecuta `ng build` para construir el proyecto. Los archivos de salida se almacenarán en el directorio `dist/`. Usa la bandera `--configuration production` para una compilación de producción.
 
 ## Running unit tests
 
@@ -57,6 +78,28 @@ El proyecto sigue una estructura organizada por módulos:
 - **@pages**: Módulos y componentes de las páginas principales
 - **@shared**: Componentes compartidos y utilidades
 
+## Módulos Principales
+
+### Catálogos (@pages/catalogs)
+Gestión de productos, categorías, marcas y atributos.
+
+### Pedidos (@pages/orders)
+Administración de órdenes, envíos y seguimiento.
+
+### Ventas (@pages/sales)
+Reportes de ventas, facturación y comisiones.
+
+### Dashboard (@pages/dashboards)
+Paneles estadísticos y visualización de datos.
+
+## Servicios GraphQL
+
+El sistema utiliza Apollo Client para la comunicación con el backend GraphQL, implementando operaciones para:
+
+- Mutaciones (crear, actualizar, eliminar)
+- Queries (consultas)
+- Subscripciones (tiempo real)
+
 ## Conexión con APIs Externas
 
 El sistema se conecta con múltiples APIs de proveedores para importar catálogos, verificar existencias y procesar pedidos. La configuración de estas conexiones se administra desde la interfaz de usuario.
@@ -64,3 +107,7 @@ El sistema se conecta con múltiples APIs de proveedores para importar catálogo
 ## Equipo de Desarrollo
 
 Desarrollado y mantenido por el equipo de DARU.MX.
+
+## Última Actualización
+
+Abril 2025

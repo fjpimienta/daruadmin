@@ -3,11 +3,9 @@ import { NgModule } from '@angular/core';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import { ApolloLink, split } from 'apollo-link';
+import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
-// import { WebSocketLink } from 'apollo-link-ws';
-// import { getMainDefinition } from 'apollo-utilities';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../environments/environment';
 
 @NgModule({
   imports: [
@@ -18,42 +16,52 @@ import { environment } from 'src/environments/environment';
 })
 export class GraphqlModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
-    // Para capturar los errores de consulta y/o de red
     const errorLink = onError(({ graphQLErrors, networkError }) => {
       if (graphQLErrors) {
-        console.log('GraphQL Errors', graphQLErrors);
+        console.error('GraphQL Errors:', graphQLErrors);
       }
       if (networkError) {
-        console.log('Network Errors', networkError);
+        console.error('Network Errors:', networkError);
+        console.error('Network Error details:', JSON.stringify(networkError));
       }
     });
-    const uri = environment.backend;
-    // const urlLink = ApolloLink.from(
-    const link = ApolloLink.from(
-      [
-        errorLink,
-        httpLink.create({ uri })
-      ]
-    );
-    // const subscriptionLink = new WebSocketLink({
-    //   uri: environment.backendWs,
-    //   options: {
-    //     reconnect: true
-    //   }
-    // });
-    // const link = split(
-    //   ({ query }) => {
-    //     const { kind, operation }: any = getMainDefinition(query);
-    //     return kind === 'OperationDefinition' && operation === 'subscription'
-    //   },
-    //   subscriptionLink,
-    //   urlLink
-    // );
+
+    const logLink = new ApolloLink((operation, forward) => {
+      // console.log('GraphQL Request:', {
+      //   query: operation.query.loc?.source.body,
+      //   variables: operation.variables
+      // });
+      return forward(operation).map((response) => {
+        // console.log('GraphQL Response:', response);
+        return response;
+      });
+    });
+
+    // Usar la URL completa desde environment.ts en lugar de la ruta relativa
+    const link = ApolloLink.from([
+      errorLink,
+      logLink,
+      httpLink.create({ 
+        uri: environment.backend
+        // Quitar withCredentials para evitar problemas de CORS
+      })
+    ]);
+
     apollo.create({
       link,
       cache: new InMemoryCache({
         addTypename: false
-      })
+      }),
+      defaultOptions: {
+        watchQuery: {
+          fetchPolicy: 'network-only',
+          errorPolicy: 'all'
+        },
+        query: {
+          fetchPolicy: 'network-only',
+          errorPolicy: 'all'
+        }
+      }
     });
   }
 }

@@ -6,35 +6,32 @@ import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
   {
+    path: 'auth',
+    loadChildren: () => import('./@account/account.module').then(m => m.AccountModule)
+  },
+  {
     path: '',
-    data: { pageTitle: 'Inicio' },
+    component: LayoutComponent,
+    canActivate: [AuthGuard],
     children: [
       {
-        path: 'auth',
-        loadChildren: () => import('./@account/account.module').then(m => m.AccountModule)
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
       },
       {
         path: '',
-        component: LayoutComponent,
         loadChildren: () => import('./@pages/pages.module').then(m => m.PagesModule)
       },
       {
         path: 'pages',
-        loadChildren: () => import('./@extrapages/extrapages.module').then(m => m.ExtrapagesModule),
-        canActivate: [AuthGuard]
+        loadChildren: () => import('./@extrapages/extrapages.module').then(m => m.ExtrapagesModule)
       },
       {
         path: 'catalogs',
-        loadChildren: () => import('./@pages/catalogs/catalogs.module').then(m => m.CatalogsModule),
-        canActivate: [AuthGuard]
+        loadChildren: () => import('./@pages/catalogs/catalogs.module').then(m => m.CatalogsModule)
       },
     ],
-  },
-  {
-    path: 'auth',
-    component: AuthGuard,
-    loadChildren: () =>
-      import('./@account/account.module').then((m) => m.AccountModule),
   },
   { path: '**', redirectTo: 'dashboard' },
 ];

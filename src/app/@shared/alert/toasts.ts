@@ -1,5 +1,5 @@
 import Swal from 'sweetalert2';
-import { TYPE_ALERT } from './values.config';
+import { TYPE_ALERT, mapTypeAlertToSweetAlertIcon } from './values.config';
 
 export function basicAlert(icon = TYPE_ALERT.SUCCESS, title: string = ''): void {
   const Toast = Swal.mixin({
@@ -11,7 +11,7 @@ export function basicAlert(icon = TYPE_ALERT.SUCCESS, title: string = ''): void 
 
   Toast.fire({
     title,
-    icon,
+    icon: mapTypeAlertToSweetAlertIcon(icon),
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.addEventListener('mouseenter', Swal.stopTimer);

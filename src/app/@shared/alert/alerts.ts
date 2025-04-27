@@ -1,6 +1,6 @@
 import Swal from 'sweetalert2';
 import { EMAIL_PATTERN } from "src/app/@core/constants/regex";
-import { TYPE_ALERT } from "./values.config";
+import { TYPE_ALERT, mapTypeAlertToSweetAlertIcon } from "./values.config";
 
 const swalWithBasicOptions = (title: string, html: string) => Swal.mixin({
   title,
@@ -230,10 +230,40 @@ export const infoEventAlert = async (title: string, html: string, typeAlert: TYP
   const result = await Swal.fire({
     title,
     html,
-    icon: typeAlert,
+    icon: mapTypeAlertToSweetAlertIcon(typeAlert),
     showConfirmButton: false,
     timerProgressBar: true,
     timer: 3000
   });
   return result;
 }
+
+/**
+ * Muestra un diálogo de confirmación para preguntar si se desea continuar con la iteración
+ * @returns Promise con el resultado de la confirmación
+ */
+export async function confirmContinueIteration() {
+  return await Swal.fire({
+    title: 'Confirmación',
+    text: '¿Desea continuar con la iteración?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sí, continuar',
+    cancelButtonText: 'No, cancelar',
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33'
+  });
+}
+
+export async function confirmIterationDialog() {
+  return await Swal.fire({
+    title: 'Confirmación',
+    text: '¿Desea continuar con la iteración?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Sí, continuar',
+    cancelButtonText: 'No, cancelar'
+  });
+};
